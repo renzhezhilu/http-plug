@@ -5,13 +5,16 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 
-var c = require('child_process');
-
 /******************************************
 配置
 *******************************************/
-const port = 8964 //端口
+const port = 8886 //端口
 let updateShowType = true //更新时间是否显示‘前’
+//过滤不必要文件
+const filterFiles = [
+    '.DS_Store',
+    '.git'
+]
 //解析文件类型
 const fileTyle = {
     // 文本
@@ -41,17 +44,12 @@ const fileTyle = {
     woff: "font/woff",
     woff2: "font/woff2",
 }
-//过滤不必要文件
-const filterFiles = [
-    '.DS_Store',
-    '.git'
-]
 
 /******************************************
 方法
 *******************************************/
 //获取url信息
-const getFileInfo = (url) => {
+const splitFileInfo = (url) => {
     let filePath = `${__dirname}${url}`
     let [base, name, ext] = [
         path.parse(filePath).base,
@@ -63,15 +61,15 @@ const getFileInfo = (url) => {
     if (isExist && fs.statSync(filePath).isDirectory()) ext = ''
 
     let con = {
-        url,
-        filePath,
-        base,
-        name,
-        ext,
-        isExist
+        url, //浏览器访问的url
+        filePath, //文件的系统地址
+        base, //完整文件名
+        name, //文件名
+        ext, //后缀名
+        isExist //是否真实存在
     }
-    console.log('url信息：',con);
-    
+    console.log('url信息：', con);
+
     return con
 }
 
@@ -166,17 +164,28 @@ let listPageHtml = function(title, back, folderPath, content) {
                 width: 96%;
                 max-width: 1000px;
                 border-radius: 8px;
-                padding: 2%;
+                padding: 3%;
                 background-color: #fff;
+                box-shadow: 0 30px 60px #eaedf9;
+            }
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                min-height: 60px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 24px;
                 line-height: 26px;
+                word-break: break-all
             }
+
             h1 a {
                 color: #2f353d;
             }
+
             h1 a:hover {
                 color: #275085;
             }
@@ -193,19 +202,22 @@ let listPageHtml = function(title, back, folderPath, content) {
                 background-color: #fff;
                 border-radius: 8px;
             }
-            tr:nth-child(even){
+
+            tr:nth-child(even) {
                 /* background-color: #f4f4f4; */
             }
-        
+
             tr:hover {
                 background-color: #f4f4f4;
             }
-            th{
+
+            th {
                 opacity: .5;
                 height: 22px;
-            } 
+            }
 
-            td,th {
+            td,
+            th {
                 padding: 4px;
                 margin: 0;
             }
@@ -231,6 +243,7 @@ let listPageHtml = function(title, back, folderPath, content) {
 
             tr td:nth-child(1) {
                 min-width: 200px;
+                max-width: 700px;
                 word-break: break-all
             }
 
@@ -247,24 +260,39 @@ let listPageHtml = function(title, back, folderPath, content) {
             .html_file {
                 background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDBCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDFCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTAzRUI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTAzRkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoriNEEAAAAYUExURW/X/fX8/6vo/ovf/tv1/2LT/VfQ/f///yRGgKwAAAAIdFJOU/////////8A3oO9WQAAALxJREFUeNrs1skOxSAIBVAEh///4ya1L1HBcmn6dr2bbjwhdUCp9WQpVrjpUP9w3YR3JNeKm06kBkwnxR7MprklV3WOENM4xDIeMYxLkjIu0XUAshqELAYis8HINAcY+dUJkfN4FJcIj4GIykfeJyJhwonCpC0GIYuxydrDJ2OSksac7Zpcorr2UAclw7XwXpXwvzyYMbUuJbqUmf6/xx7s5K9d7IlgRLBnz5gMPa6M+4bun3BDJF9DDwEGANP9OsC2Qk6FAAAAAElFTkSuQmCC') no-repeat 0 0;
                 background-size: 100% 100%;
+                
+            }
+
+            .logo {
+                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAAwCAMAAABufOK2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDRCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDVCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTA0MkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTA0M0I3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpkSyjYAAAAMUExURdLS0nx8fCUlJf///4YL0UUAAAAEdFJOU////wBAKqn0AAADb0lEQVR42uyb0YKrIAxEZ+T///lut9dWNAMJAu228ohY8DQmQ4hIIxpALrtGEunb2pAnxiIaLrwlm/Q1LsvFN4L3xowFau524fX40QtvH7zFN70Z7+1VeDR8Ld7ObH/Uw306fo1BYyLcH7zpwltTV33x8it97wDTfbJcPhbvKgPWkIKJtvtwBDW8tP8NJvGfi+7cRMwgKkfQWB520fgQnHmIM5hJ14s3v4bn3TG8Sb09x5kOI6w7sNM/u6eC8VsCL0fiRSWy6cewlyV0OVEV3nIErPGPacxl0lqBwLu8Ed7NU9HhBJ7dqG5s5IgiXlq0aYYatMQ1utp5vIfH8DqBezcK0bWAl0G81HT3eO85mS5bWzbvKmjjpYgIFN3K1qs+EIclVPFiF9G49me5BYYiVByvkXmLCAfbumW3eH4xUzbCEg5pkXhxQIP/PrxF6LY6B6fGpS0cKKxbdme/gxrebATrwiEZww+Gh9WWlgnNuf+VuqygSa3u/HcsvHJETJdB2g/SFLARvBV56ca7u9FAIEeYkQ1Sl0njfWu8eyWQCpLf6IatZCVeVPBSChrhrUJ4m9VYb7yobBFgdlgWJkfEZK/2DRG8pw4xA3hZmd+LN7MpLIaFyRExXZbNzMwgZuLla/Ay00VSl7FZl1Hg/d1WcJpzCOoydXdUl53YVfh0WTZzK95u2V6vLlNcorpM+yc5IqbLFrE7fku8GIkX1T8S2ws+XVbE++ayl6d12fB0pMKL2/7/r+EN6zIZWuWIYDpSpeLxSK/4PUST4G3SZeKdD+uydd21GMpy8NT5sn3GanM3ogmdE8cbMbzshJfemSoXFpnHq+N9nnEOx3s2HdmUL+uOF1rGYaumD8l0jnIOPJ5VWBuNXvmyDngz08jXtf03aUcL2ifFGCTVfCU6vfJlqS4H/efH2UY525vliXhs8Qm8aR5e+tOR5/JlDolSFGwsbgL1JcwrcvCV6HTXZb3wwnn0/Sq8vhqS7rrMqwCLzw/lkQvvu8TLN8DL1+GlyDVTqyiKQI7ZBWbVIodKHdej0Mu+bYxwoMWFBZNc14t59ZE+vH+rAtK4lF3DvPrTT8DbrXz6KvwfW53eGzBzZ/r5n61U8N4/Z5t9VvFFeFfEXT5su/AWIXu+dr2+d23D62686I7Ea34iS1kF/+ntnwADAJagn1Xt09BIAAAAAElFTkSuQmCC') no-repeat 0 0;
+                background-size: 100% auto;
+                width: 146px;
+                height: 22px;
+                flex-shrink: 0;
             }
 
 
-
-            /* tr td:nth-child(3){
-                min-width: 60px;
+            tr td:nth-child(2){
+                width: 80px;
+            }
+            tr td:nth-child(3){
+                width: 80px;
             }
             tr td:nth-child(4){
-                min-width: 50px;
-            } */
+                width: 20px;
+            }
         </style>
 
         <div class="main">
-            <h1>
-                <a href="${back}">↵</a> 
-                PATH: 
-                <span>${folderPath}</span>
-            </h1>
+            <header>
+                <h1>
+                    <a href="${back}">↵
+                    PATH: 
+                    <span>${folderPath}</span>
+                    </a> 
+                </h1>
+                <div class="logo"></div>
+            </header>
 
             <table>
                 <tr>
@@ -301,7 +329,7 @@ let server = http.createServer(function(req, res) {
         name,
         ext,
         isExist
-    } = getFileInfo(decodeURI(req.url))
+    } = splitFileInfo(decodeURI(req.url))
     // 目录
     if (url.endsWith('/') && isExist) {
         let files = fs.readdirSync(filePath)
@@ -315,7 +343,7 @@ let server = http.createServer(function(req, res) {
 
         let folderPath = url
         let content = ``
-        console.log('目录文件：',files);
+        console.log('目录文件：', files);
         // 获取文件夹内容的信息，如果还是文件夹则获取其文件数量
         files.map(file => {
             let thisFile = filePath + file
@@ -352,11 +380,6 @@ let server = http.createServer(function(req, res) {
             } else {
                 thisTime = new Date(stats.mtime).toJSON().substr(0, 10) + ' ' + new Date().toTimeString().substr(0, 8)
             }
-            // 
-
-
-
-
             // 大小
             let thisSize = stats.size / 1000
             if (thisSize > 999) {
@@ -366,15 +389,13 @@ let server = http.createServer(function(req, res) {
             }
             // 文件数量
             let thisCount = '-'
+            // 如果是文件夹
             if (stats.isDirectory()) {
                 let files = fs.readdirSync(thisFile + '/')
                 files = files.filter(f => !filterFiles.includes(f))
                 thisCount = files.length
-
                 thisSize = '-'
-
                 thisLink += '/'
-
             }
 
             content +=
@@ -398,15 +419,18 @@ let server = http.createServer(function(req, res) {
     }
     // 文件
     else if (isExist) {
+        // 支持的格式
         if (fileTyle[ext]) {
             res.setHeader('Content-Type', fileTyle[ext]);
             fs.createReadStream(filePath).pipe(res);
-        } else {
+        }
+        // 不支持的格式都当文本处理 
+        else {
             // res.writeHead(200, {
             //     "Content-Type": "text/html;charset=utf-8"
             // });
             // res.end(`不支持文件格式:${name}，可在fileTyle常量添加文件解析类型。<a href="/">返回首页</a></br>${JSON.stringify(fileTyle)}`);
-            res.setHeader('Content-Type','text/plain;charset=utf-8');
+            res.setHeader('Content-Type', 'text/plain;charset=utf-8');
             fs.createReadStream(filePath).pipe(res);
         }
     }
@@ -420,6 +444,4 @@ let server = http.createServer(function(req, res) {
 
 
 })
-server.listen(port,'localhost');
-
-  
+server.listen(port, 'localhost');

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>%%pageTitle%%</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -15,99 +15,187 @@
             padding: 0;
             text-decoration: none;
             list-style: none;
-            font-size: 14px;
-            box-lines: 26px;
-
+            transition: .3s;
         }
 
         body {
+            font-size: 12px;
             padding: 2%;
-            color: #333;
+            color: #2f353d;
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+        }
+
+        .main {
+            width: 96%;
+            max-width: 1000px;
+            border-radius: 8px;
+            padding: 2%;
+            background-color: #fff;
         }
 
         h1 {
             font-size: 32px;
             line-break: 60px;
         }
+        h1 a {
+            color: #2f353d;
+        }
+        h1 a:hover {
+            color: #275085;
+        }
 
         table {
             width: 100%;
+            text-align: left;
+            border-collapse: collapse;
         }
 
-        td {
-            padding: 4px 0;
+        tr {
+            padding: 0;
+            margin: 0;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        tr:nth-child(even){
+            /* background-color: #f4f4f4; */
+        }
+       
+        tr:hover {
+            background-color: #f4f4f4;
+        }
+        th{
+            opacity: .5;
+            height: 22px;
+        } 
+
+        td,th {
+            padding: 4px;
+            margin: 0;
         }
 
         td a {
             font-size: 16px;
             box-lines: 22px;
-            min-width: 300px;
-            display: block;
+            display: flex;
+            align-items: center;
+            color: #2f353d;
+            font-weight: 900;
+        }
+
+
+        .icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 7px;
+            flex-shrink: 0;
 
         }
+
+        tr td:nth-child(1) {
+            min-width: 200px;
+            word-break: break-all
+        }
+
+        .folder {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwM0NCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwM0RCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2NEY3RDk3RkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2NEY3RDk4MEI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtFJd1YAAAAYUExURd3d3mx8j42aqfj5+rW6wGV2il1vhP///x7OQvkAAAAIdFJOU/////////8A3oO9WQAAAGlJREFUeNrs1jEOgDAMQ1Enbdz73xgJJkQTySOQvz91c4olh98TuMW9WZMx+aw0ACkaOFUDY2LGrpNEQhibzFGR9HWZEDpxnZhOokmTJk1eT0xfS9c3Gfryrynel/0RT7uu2If+MIcAAwAjSzu4D8MtOQAAAABJRU5ErkJggg==') no-repeat 0 0;
+            background-size: 100% 100%;
+        }
+
+        .file {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjRGN0Q5N0RCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjRGN0Q5N0VCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2NEY3RDk3QkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2NEY3RDk3Q0I3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pvz31UUAAAAYUExURenr7mR3jIuZqXeIm7/H0JqmtFpuhf///7mCQO0AAAAIdFJOU/////////8A3oO9WQAAAKVJREFUeNrs1tEKwCAIBVBLq///441RZkvD3r2PtRMSI4XGoZy2FGhbeAmwaklgEqhWyCCQviNxjW46Kd/erwjIqulfJa0CrpY08q5jM8lqJikHshgnkcZLhHGTafyEzQUZ/84FqdlD8mocpAGNoJeI4D0pQYIECRLEaK/HB1Zv4iI0Dz2NCrID1Fn6cSDhJKWLdXMMOIcrDsI2j+kj3EgWd/MIMADRrD7NdGLHkQAAAABJRU5ErkJggg==') no-repeat 0 0;
+            background-size: 100% 100%;
+        }
+
+        .html_file {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDBCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDFCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTAzRUI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTAzRkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoriNEEAAAAYUExURW/X/fX8/6vo/ovf/tv1/2LT/VfQ/f///yRGgKwAAAAIdFJOU/////////8A3oO9WQAAALxJREFUeNrs1skOxSAIBVAEh///4ya1L1HBcmn6dr2bbjwhdUCp9WQpVrjpUP9w3YR3JNeKm06kBkwnxR7MprklV3WOENM4xDIeMYxLkjIu0XUAshqELAYis8HINAcY+dUJkfN4FJcIj4GIykfeJyJhwonCpC0GIYuxydrDJ2OSksac7Zpcorr2UAclw7XwXpXwvzyYMbUuJbqUmf6/xx7s5K9d7IlgRLBnz5gMPa6M+4bun3BDJF9DDwEGANP9OsC2Qk6FAAAAAElFTkSuQmCC') no-repeat 0 0;
+            background-size: 100% 100%;
+        }
+
+
+
+        /* tr td:nth-child(3){
+            min-width: 60px;
+        }
+        tr td:nth-child(4){
+            min-width: 50px;
+        } */
     </style>
 
-    <h1>Index of /test</h1>
+    <div class="main">
+        <h1>
+            <a href="">↵</a> 
+            PATH: 
+            <span>/test</span>
+        </h1>
 
-    <table>
-        <tr>
-            <th>文件名</th>
-            <th>更新时间</th>
-            <th>大小</th>
-            <th>类型</th>
-        </tr>
-        <tr>
-            <td>
-                <a href="" target="_blank">
-                    📁app/
-                </a>
-            </td>
-            <td>2020-05-11 16:47</td>
-            <td>313 kb</td>
-            <td>文件夹</td>
-        </tr>
-        <tr>
+        <table>
+            <tr>
+                <th>文件名</th>
+                <th>更新时间</th>
+                <th>大小</th>
+                <th>文件数量</th>
+            </tr>
+            <tr>
+                <td>
+                    <a href="">
+                        <span class="icon folder"></span>
+                        app/
+                    </a>
+                </td>
+                <td>2020-05-11 16:47</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
 
-            <td>
-                <a href="" target="_blank">
-                        📃static_server_node_pageStyle.html
-                </a>
-            </td>
-            <td>2020-05-11 16:47</td>
-            <td>63 kb</td>
-            <td>html文件</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="" target="_blank">
-                        📃使用JS和canvas实现gif动图的停止和播放实例页面.html
-                </a>
-            </td>
-            <td>2020-05-11 16:47</td>
-            <td>13 kb</td>
-            <td>html文件</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="" target="_blank">
-                        🌇g.gif
-                </a>
-            </td>
-            <td>2020-05-11 16:47</td>
-            <td>421 kb</td>
-            <td>图片</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="" target="_blank">
-                    mov_bbb.mp4
-                </a>
-            </td>
-            <td>2020-05-11 16:47</td>
-            <td>1273 kb</td>
-            <td>视频</td>
-        </tr>
-    </table>
+                <td>
+                    <a href="">
+                        <sapn class="icon folder"></sapn>
+                        static_server_node_pageStyle.html
+                    </a>
+                </td>
+                <td>2020-05-11 16:47</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="">
+                        <sapn class="icon file"></sapn>
+                        使用JS和canvas实现gif动图的停止和播放实例页面.html
+                    </a>
+                </td>
+                <td>2020-05-11 16:47</td>
+                <td>13 kb</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="">
+                        <sapn class="icon file"></sapn>
+                        g.gif
+                    </a>
+                </td>
+                <td>2020-05-11 16:47</td>
+                <td>421 kb</td>
+                <td>32</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="">
+                        <sapn class="icon html_file"></sapn>
+                        mov_bbb.mp4
+                    </a>
+                </td>
+                <td>2020-05-11 16:47</td>
+                <td>1273 kb</td>
+                <td>1</td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>

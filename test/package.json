@@ -1,0 +1,9 @@
+{
+  "bin": "static_server_node.js",
+  "pkg": {
+    "assets": []
+  },
+  "dependencies": {
+    "upx": "^1.0.6"
+  }
+}

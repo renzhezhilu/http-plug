@@ -1,3 +1,6 @@
+#!/usr/bin/env node 
+// ⬆️ 指定文件由node执行，全局命令用
+
 /******************************************
 系统模块
 *******************************************/
@@ -5,11 +8,16 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 
+
 /******************************************
 配置
 *******************************************/
-const port = 8886 //端口
-let updateShowType = true //更新时间是否显示‘前’
+//用户自定义端口
+const config_port = process.argv[2] || process.env.npm_package_config_port 
+const port = config_port || 9527    // 端口
+let updateShowType = true           // 更新时间是否显示‘前’
+let isLog = true                    // 是否打印访问日志
+let isPkg = false                   // 当前模式是否pkg打包
 //过滤不必要文件
 const filterFiles = [
     '.DS_Store',
@@ -44,13 +52,53 @@ const fileTyle = {
     woff: "font/woff",
     woff2: "font/woff2",
 }
+// 欢迎
+const welcome = 
+`
+ _______________________________________________
+|           __  __  ______  ______  ______      |
+|          / /_/ / /_  __/ /_  __/ / __  /      |
+|         / __  /   / /     / /   / /_/_/       |
+|        /_/ /_/   /_/     /_/   /_/            |
+|          ______  __      __  __  ______       |
+|         / __  / / /     / / / / / ____/       |
+|        / /_/_/ / /___  / /_/ / / /__/ /       |
+|       /_/     /_____/ /_____/ /______/        |
+|                                               |
+|                   v0.1.2                      |
+|   https://github.com/renzhezhilu/http-plug    |
+|_______________________________________________|
+
+请访问：http://127.0.0.1:${port}
+`
 
 /******************************************
 方法
+// console.log('__filename:', __filename);
+// console.log('__dirname:', __dirname);
+// console.log('process.cwd():', process.cwd());
+// console.log('process.execPath:', process.execPath);
 *******************************************/
 //获取url信息
 const splitFileInfo = (url) => {
-    let filePath = `${__dirname}${url}`
+
+    let filePath
+    //process.execPath 在pkg和本级node输出一致，其他__dirname之类的不行
+    let execPath = process.execPath
+    switch (isPkg) {
+        // pkg 打包时
+        case true:
+            execPath = execPath.split(path.sep)
+            execPath.pop()
+            execPath = execPath.join(path.sep)
+            filePath = `${execPath}${url}`
+            break;
+            // 单文件
+        case false:
+            filePath = `${process.cwd()}${url}`
+            break;
+    }
+
     let [base, name, ext] = [
         path.parse(filePath).base,
         path.parse(filePath).name,
@@ -68,7 +116,7 @@ const splitFileInfo = (url) => {
         ext, //后缀名
         isExist //是否真实存在
     }
-    console.log('url信息：', con);
+    isLog? console.log('url信息：', con) : null
 
     return con
 }
@@ -122,6 +170,50 @@ function twoTimeInterval(beforeTime, afterTime) {
         }
     }
     return out
+}
+// 打开链接 form https://github.com/rauschma/openurl
+var spawn = require('child_process').spawn;
+var command;
+switch(process.platform) {
+    case 'darwin':
+        command = 'open';
+        break;
+    case 'win32':
+        command = 'explorer.exe';
+        break;
+    case 'linux':
+        command = 'xdg-open';
+        break;
+    default:
+        throw new Error('Unsupported platform: ' + process.platform);
+}
+function open(url, callback) {
+    var child = spawn(command, [url]);
+    var errorText = "";
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function (data) {
+        errorText += data;
+    });
+    child.stderr.on('end', function () {
+        if (errorText.length > 0) {
+            var error = new Error(errorText);
+            if (callback) {
+                callback(error);
+                console.log('自动打开浏览器失败，请手动打开');
+            } else {
+                throw error;
+            }
+        } else if (callback) {
+            callback(error);
+        }
+        else{
+            console.log(`
+                        ✅ 启动成功！
+
+
+            `);
+        }
+    });
 }
 
 
@@ -314,13 +406,14 @@ let listPageHtml = function(title, back, folderPath, content) {
 /******************************************
 搭建服务器
 *******************************************/
-// let isFirstOen = false
-// if(!isFirstOen){
-//     console.log(`用浏览器打开：localhost:${port}`);
-// }  
+let isFirstOen = false
+if(!isFirstOen){
+    open(`http://127.0.0.1:${port}`)
+    console.log(welcome);
+}  
 let server = http.createServer(function(req, res) {
     // 第一次打开时
-    // isFirstOen = true
+    isFirstOen = true
     // 响应请求
     let {
         url,
@@ -343,7 +436,7 @@ let server = http.createServer(function(req, res) {
 
         let folderPath = url
         let content = ``
-        console.log('目录文件：', files);
+        isLog ? console.log('文件夹内容：', files) : null
         // 获取文件夹内容的信息，如果还是文件夹则获取其文件数量
         files.map(file => {
             let thisFile = filePath + file

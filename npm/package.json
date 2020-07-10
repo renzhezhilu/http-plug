@@ -1,6 +1,6 @@
 {
     "name": "http-plug",
-    "version": "0.1.2",
+    "version": "0.1.10",
     "description": "无依赖的迷你静态服务器，主要做html测试",
     "main": "http-plug.js",
     "config": {

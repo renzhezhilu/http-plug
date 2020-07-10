@@ -1,60 +1,70 @@
-#!/usr/bin/env node 
-// ⬆️ 指定文件由node执行，全局命令用
-
+#!/usr/bin/env node
+ // ⬆️ 指定文件由node执行，全局命令用
 /******************************************
 系统模块
 *******************************************/
 const http = require("http");
 const path = require("path");
 const fs = require("fs");
+const net = require('net')
 
 
 /******************************************
 配置
 *******************************************/
 //用户自定义端口
-const config_port = process.argv[2] || process.env.npm_package_config_port 
-const port = config_port || 9527    // 端口
-let updateShowType = true           // 更新时间是否显示‘前’
-let isLog = true                    // 是否打印访问日志
-let isPkg = false                   // 当前模式是否pkg打包
+let version = 'v1.0.10'
+let port = 9527 // 端口
+let updateShowType = true // 更新时间是否显示‘前’
+let isLog = false // 是否打印访问日志
+let isPkg = false // 当前模式是否pkg打包
+
+// 命令行
+processReturn()
+
 //过滤不必要文件
-const filterFiles = [
-    '.DS_Store',
-    '.git'
-]
+const filterFiles = function(files) {
+    let noNeed = [
+        '.DS_Store',
+        '.git',
+        // '.gitignore'
+    ]
+    return files.filter(f => !noNeed.includes(f))
+}
 //解析文件类型
-const fileTyle = {
-    // 文本
-    html: 'text/html;charset=utf-8',
-    htm: 'text/html;charset=utf-8',
-    js: "application/javascript;charset=utf-8",
-    json: "application/json;charset=utf-8",
-    css: "text/css;charset=utf-8",
-    md: "text/markdown;charset=utf-8",
-    txt: "text/plain;charset=utf-8",
-    xml: "text/xml;charset=utf-8",
-    // 图片
-    png: "image/png",
-    webp: "image/webp",
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    gif: "image/gif",
-    ico: "image/x-icon",
-    svg: "image/svg+xml",
-    // 媒体
-    mp3: "audio/mpeg",
-    mp4: "video/mp4",
-    // 文件
-    zip: "application/zip",
-    tif: "image/tiff",
-    ttf: "font/ttf",
-    woff: "font/woff",
-    woff2: "font/woff2",
+const fileTyle = function() {
+    return {
+        // 文本
+        html: 'text/html;charset=utf-8',
+        htm: 'text/html;charset=utf-8',
+        js: "application/javascript;charset=utf-8",
+        json: "application/json;charset=utf-8",
+        css: "text/css;charset=utf-8",
+        md: "text/markdown;charset=utf-8",
+        txt: "text/plain;charset=utf-8",
+        xml: "text/xml;charset=utf-8",
+        // 图片
+        png: "image/png",
+        webp: "image/webp",
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        gif: "image/gif",
+        ico: "image/x-icon",
+        svg: "image/svg+xml",
+        // 媒体
+        mp3: "audio/mpeg",
+        mp4: "video/mp4",
+        // 文件
+        zip: "application/zip",
+        tif: "image/tiff",
+        ttf: "font/ttf",
+        woff: "font/woff",
+        woff2: "font/woff2",
+    }
 }
 // 欢迎
-const welcome = 
-`
+const welcome = function() {
+    return `
  _______________________________________________
 |           __  __  ______  ______  ______      |
 |          / /_/ / /_  __/ /_  __/ / __  /      |
@@ -65,12 +75,12 @@ const welcome =
 |        / /_/_/ / /___  / /_/ / / /__/ /       |
 |       /_/     /_____/ /_____/ /______/        |
 |                                               |
-|                   v0.1.2                      |
+|                   ${version}                      |
 |   https://github.com/renzhezhilu/http-plug    |
 |_______________________________________________|
 
-请访问：http://127.0.0.1:${port}
 `
+}
 
 /******************************************
 方法
@@ -81,7 +91,6 @@ const welcome =
 *******************************************/
 //获取url信息
 const splitFileInfo = (url) => {
-
     let filePath
     //process.execPath 在pkg和本级node输出一致，其他__dirname之类的不行
     let execPath = process.execPath
@@ -93,7 +102,7 @@ const splitFileInfo = (url) => {
             execPath = execPath.join(path.sep)
             filePath = `${execPath}${url}`
             break;
-            // 单文件
+            // 单文件和npm模块
         case false:
             filePath = `${process.cwd()}${url}`
             break;
@@ -116,13 +125,54 @@ const splitFileInfo = (url) => {
         ext, //后缀名
         isExist //是否真实存在
     }
-    isLog? console.log('url信息：', con) : null
+    isLog ? console.log('url信息：', con) : null
 
     return con
 }
 
-//两个时间的间隔 form https://github.com/renzhezhilu/Blog/blob/master/javaScript/jsBasic/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-Object-Date.js
-function twoTimeInterval(beforeTime, afterTime) {
+// 端口检测
+const canUseProt = function(intPort) {
+    let testProt = net.createServer()
+    return new Promise((resolve, reject) => {
+        // 是否可用
+        if (intPort) {
+            if (isNaN(intPort)) {
+                console.log(`⚠️  请输入数字类型！`);
+                resolve(false)
+            } else if (intPort < 2000 || intPort > 65535) {
+                console.log(`🚫 端口 ${intPort} 不可用！`);
+                resolve(false)
+            } else {
+                testProt.listen(intPort, 'localhost', () => {
+                    console.log(`☑️ 端口 ${intPort} 可用`);
+                    testProt.close()
+                    resolve(true)
+                });
+                testProt.on('error', (e) => {
+                    if (e.code === 'EADDRINUSE') {
+                        console.log(`🚫 端口 ${intPort} 不可用！`);
+                        testProt.close();
+                        resolve(false)
+                    }
+                });
+            }
+
+        }
+        // 返回可用端口
+        else {
+            testProt.listen(() => {
+                let p = testProt.address().port
+                console.log(`自动分配端口：${p}`);
+                testProt.close()
+                resolve(p)
+            });
+        }
+    })
+}
+
+//两个时间的间隔 
+//form https://github.com/renzhezhilu/Blog/blob/master/javaScript/jsBasic/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-Object-Date.js
+const twoTimeInterval = function(beforeTime, afterTime) {
     let interval = 0
     let unit = [{
             n: 1000 * 60 * 60 * 24 * 30 * 12 * 100,
@@ -171,49 +221,93 @@ function twoTimeInterval(beforeTime, afterTime) {
     }
     return out
 }
-// 打开链接 form https://github.com/rauschma/openurl
-var spawn = require('child_process').spawn;
-var command;
-switch(process.platform) {
-    case 'darwin':
-        command = 'open';
-        break;
-    case 'win32':
-        command = 'explorer.exe';
-        break;
-    case 'linux':
-        command = 'xdg-open';
-        break;
-    default:
-        throw new Error('Unsupported platform: ' + process.platform);
-}
-function open(url, callback) {
-    var child = spawn(command, [url]);
-    var errorText = "";
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', function (data) {
-        errorText += data;
-    });
-    child.stderr.on('end', function () {
-        if (errorText.length > 0) {
-            var error = new Error(errorText);
-            if (callback) {
+// 打开链接 
+//form https://github.com/rauschma/openurl
+const openUrl = function(url, callback) {
+    var spawn = require('child_process').spawn;
+    var command;
+    switch (process.platform) {
+        case 'darwin':
+            command = 'open';
+            break;
+        case 'win32':
+            command = 'explorer.exe';
+            break;
+        case 'linux':
+            command = 'xdg-open';
+            break;
+        default:
+            throw new Error('Unsupported platform: ' + process.platform);
+    }
+
+    function open(url, callback) {
+        var child = spawn(command, [url]);
+        var errorText = "";
+        child.stderr.setEncoding('utf8');
+        child.stderr.on('data', function(data) {
+            errorText += data;
+        });
+        child.stderr.on('end', function() {
+            if (errorText.length > 0) {
+                var error = new Error(errorText);
+                if (callback) {
+                    callback(error);
+                    console.log('自动打开浏览器失败，请手动打开');
+                } else {
+                    throw error;
+                }
+            } else if (callback) {
                 callback(error);
-                console.log('自动打开浏览器失败，请手动打开');
             } else {
-                throw error;
+                // console.log(`✅ 启动成功！`);
             }
-        } else if (callback) {
-            callback(error);
+        });
+    }
+    open(url, callback)
+}
+
+// 终端命令
+function processReturn() {
+    let argv = process.argv
+    argv = argv.slice(2)
+    let helpLog = ()=>{
+        return  console.log(
+            `
+plug                    打开http-plug(默认端口9527)
+plug 8888               使用8888端口打开（失败后则重新随机分配）
+plug -l | -L            打印日志 
+plug 8888 -l | -L       指定端口并打印日志 
+plug -v | -V            查看版本
+plug -h | -H            帮助
+            `
+        );
+    }
+    if (argv.length === 1) {
+        //版本
+        if (['-v', '-V','-version'].includes(argv[0])) {
+            console.log(version);
+            process.exit()
+        } 
+        else if (['-l', '-L','-log'].includes(argv[0])) {
+            isLog = true
         }
+        // 帮助
+        else if (['-h', '-H','-help'].includes(argv[0])) {
+            helpLog()
+            process.exit()
+        }
+        // 端口
         else{
-            console.log(`
-                        ✅ 启动成功！
-
-
-            `);
+            port = argv[0]
         }
-    });
+    }
+    else if (argv.length === 2) {
+        port = argv[0]
+        isLog = true
+    }else if(argv.length>=3){
+        console.log('命令错误');
+        helpLog()
+    }
 }
 
 
@@ -221,7 +315,7 @@ function open(url, callback) {
 文件列表html模版
 *******************************************/
 // html模版(title 页面标题,back 返回的链接,path 当前路径,content 列表内容)
-let listPageHtml = function(title, back, folderPath, content) {
+const listPageHtml = function(title, back, folderPath, content) {
     let html = `
     <!DOCTYPE html>
     <html>
@@ -406,93 +500,105 @@ let listPageHtml = function(title, back, folderPath, content) {
 /******************************************
 搭建服务器
 *******************************************/
-let isFirstOen = false
-if(!isFirstOen){
-    open(`http://127.0.0.1:${port}`)
-    console.log(welcome);
-}  
-let server = http.createServer(function(req, res) {
-    // 第一次打开时
-    isFirstOen = true
-    // 响应请求
-    let {
-        url,
-        filePath,
-        base,
-        name,
-        ext,
-        isExist
-    } = splitFileInfo(decodeURI(req.url))
-    // 目录
-    if (url.endsWith('/') && isExist) {
-        let files = fs.readdirSync(filePath)
-        files = files.filter(f => !filterFiles.includes(f))
-        res.writeHead(200, {
-            "Content-Type": "text/html;charset=utf-8"
-        });
-        let title = base
-        let back = url.split('/')
-        back = back.slice(0, back.length - 2).join('/') + '/'
+// 启动前检测端口
+GO()
+async function GO() {
+    console.log(welcome());
+    let isOkPort = await canUseProt(port)
+    if (isOkPort) {
+        startServer()
+    } else {
+        port = await canUseProt()
+        startServer()
+    }
+    openUrl(`http://localhost:${port}`)
+    console.log(`如未自动打开，请访问：http://localhost:${port}`);
 
-        let folderPath = url
-        let content = ``
-        isLog ? console.log('文件夹内容：', files) : null
-        // 获取文件夹内容的信息，如果还是文件夹则获取其文件数量
-        files.map(file => {
-            let thisFile = filePath + file
-            let stats = fs.statSync(thisFile);
-            let ext = ''
-            let isDir = fs.statSync(thisFile).isDirectory()
-            if (!isDir) {
-                ext = path.parse(thisFile).ext.substr(1)
-                // 修复识别不了类似‘.eslintrc’这样的文件名
-                if (!ext) {
-                    ext = path.parse(thisFile).base
+}
+// 启动服务
+function startServer() {
+    let server = new http.Server();
+    server.listen(port, 'localhost');
+    server.on('request', function(req, res) {
+        // 响应请求
+        let {
+            url,
+            filePath,
+            base,
+            name,
+            ext,
+            isExist
+        } = splitFileInfo(decodeURI(req.url))
+        // 目录
+        if (url.endsWith('/') && isExist) {
+            let files = fs.readdirSync(filePath)
+            files = filterFiles(files)
+            res.writeHead(200, {
+                "Content-Type": "text/html;charset=utf-8"
+            });
+            let title = base
+            let back = url.split('/')
+            back = back.slice(0, back.length - 2).join('/') + '/'
+
+            let folderPath = url
+            let content = ``
+            isLog ? console.log('文件夹内容：', files) : null
+            // 获取文件夹内容的信息，如果还是文件夹则获取其文件数量
+            files.map(file => {
+                let thisFile = filePath + file
+                let stats = fs.statSync(thisFile);
+                let ext = ''
+                let isDir = fs.statSync(thisFile).isDirectory()
+                if (!isDir) {
+                    ext = path.parse(thisFile).ext.substr(1)
+                    // 修复识别不了类似‘.eslintrc’这样的文件名
+                    if (!ext) {
+                        ext = path.parse(thisFile).base
+                    }
                 }
-            }
-            let thisClassName = ''
-            switch (ext) {
-                case 'html':
-                    thisClassName = 'html_file'
-                    break;
-                case '':
-                    thisClassName = 'folder'
-                    break
-                default:
-                    thisClassName = 'file'
-                    break;
-            }
-            // 链接
-            let thisLink = url + file
-            // 名称
-            let thisName = file
-            // 更新时间
-            let thisTime = ''
-            if (updateShowType) {
-                thisTime = twoTimeInterval(new Date(stats.mtime), new Date());
-            } else {
-                thisTime = new Date(stats.mtime).toJSON().substr(0, 10) + ' ' + new Date().toTimeString().substr(0, 8)
-            }
-            // 大小
-            let thisSize = stats.size / 1000
-            if (thisSize > 999) {
-                thisSize = (thisSize / 1000).toFixed(1) + ' MB'
-            } else {
-                thisSize = thisSize.toFixed(2) + ' KB'
-            }
-            // 文件数量
-            let thisCount = '-'
-            // 如果是文件夹
-            if (stats.isDirectory()) {
-                let files = fs.readdirSync(thisFile + '/')
-                files = files.filter(f => !filterFiles.includes(f))
-                thisCount = files.length
-                thisSize = '-'
-                thisLink += '/'
-            }
+                let thisClassName = ''
+                switch (ext) {
+                    case 'html':
+                        thisClassName = 'html_file'
+                        break;
+                    case '':
+                        thisClassName = 'folder'
+                        break
+                    default:
+                        thisClassName = 'file'
+                        break;
+                }
+                // 链接
+                let thisLink = url + file
+                // 名称
+                let thisName = file
+                // 更新时间
+                let thisTime = ''
+                if (updateShowType) {
+                    thisTime = twoTimeInterval(new Date(stats.mtime), new Date());
+                } else {
+                    thisTime = new Date(stats.mtime).toJSON().substr(0, 10) + ' ' + new Date().toTimeString().substr(0, 8)
+                }
+                // 大小
+                let thisSize = stats.size / 1000
+                if (thisSize > 999) {
+                    thisSize = (thisSize / 1000).toFixed(1) + ' MB'
+                } else {
+                    thisSize = thisSize.toFixed(2) + ' KB'
+                }
+                // 文件数量
+                let thisCount = '-'
+                // 如果是文件夹
+                if (stats.isDirectory()) {
+                    let files = fs.readdirSync(thisFile + '/')
+                    files = filterFiles(files)
+                    thisCount = files.length
+                    thisSize = '-'
+                    thisLink += '/'
+                }
 
-            content +=
-                `
+                content +=
+                    `
                 <tr>
                     <td>
                         <a href="${thisLink}">
@@ -505,36 +611,39 @@ let server = http.createServer(function(req, res) {
                     <td>${thisCount}</td>
                 </tr>
             `
-        })
-        res.end(`
+            })
+            res.end(`
            ${listPageHtml(title, back, folderPath, content)}
         `);
-    }
-    // 文件
-    else if (isExist) {
-        // 支持的格式
-        if (fileTyle[ext]) {
-            res.setHeader('Content-Type', fileTyle[ext]);
-            fs.createReadStream(filePath).pipe(res);
         }
-        // 不支持的格式都当文本处理 
+        // 文件
+        else if (isExist) {
+            // 支持的格式
+            if (fileTyle()[ext]) {
+                res.setHeader('Content-Type', fileTyle()[ext]);
+                fs.createReadStream(filePath).pipe(res);
+            }
+            // 不支持的格式都当文本处理 
+            else {
+                res.setHeader('Content-Type', 'text/plain;charset=utf-8');
+                fs.createReadStream(filePath).pipe(res);
+            }
+        }
+        // 不存在
         else {
-            // res.writeHead(200, {
-            //     "Content-Type": "text/html;charset=utf-8"
-            // });
-            // res.end(`不支持文件格式:${name}，可在fileTyle常量添加文件解析类型。<a href="/">返回首页</a></br>${JSON.stringify(fileTyle)}`);
-            res.setHeader('Content-Type', 'text/plain;charset=utf-8');
-            fs.createReadStream(filePath).pipe(res);
+            res.writeHead(404, {
+                "Content-Type": "text/html;charset=utf-8"
+            });
+            res.end(`<h1>404 Not Found!</h1>`);
         }
-    }
-    // 不存在
-    else {
-        res.writeHead(404, {
-            "Content-Type": "text/html;charset=utf-8"
-        });
-        res.end(`<h1>404 Not Found!</h1>`);
-    }
-
-
-})
-server.listen(port, 'localhost');
+    })
+}
+/******************************************
+全局事件处理
+*******************************************/
+// 监听错误，防止进程意外退出
+// process.on('uncaughtException', function(err) {
+//     // console.log(err.code);
+//     //打印出错误的调用栈方便调试
+//     // console.log(err.stack);
+// });

@@ -14,7 +14,7 @@ rm npm/*
 ### 复制package. json和http-plug. js到npm里
 
 ``` 
-cp package.json http-plug.js npm
+cp http-plug.js npm
 ```
 
 ### 进入npm
@@ -30,7 +30,8 @@ cd npm
 ``` 
 npm config get registry
 ```
-> https://registry.npm.taobao.org/
+> 🚫  https://registry.npm.taobao.org/
+> ✅  http://registry.npmjs.org/
 
 或
 
@@ -83,7 +84,8 @@ npm publish
 
 ### 更新
 
-修改package. json版本字段version
+修改/npm/package. json的版本字段version
+修改/npm/http-plug.js的version
 
 ``` 
 npm publish

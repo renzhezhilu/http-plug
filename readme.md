@@ -4,7 +4,11 @@
 ![title](./psd/http-plug-UI.png)
 
 </center>
+<p align="center">
+![title](./psd/logo.png)
+![title](./psd/http-plug-UI.png)
 
+</p>
 # http-plug
 
 ### node实现的无依赖http静态服务器。
@@ -18,9 +22,9 @@
 
 http-plug有以下几点优势。
 
-    [x] 非常迷你,无依赖,30KB不到
-    [x] 全局命令,哪里需要点哪里
-    [x] html页面改动实时刷新
+* [x] 非常迷你,无依赖,30KB不到
+* [x] 全局命令,哪里需要点哪里
+* [x] html页面改动实时刷新
  
 
 

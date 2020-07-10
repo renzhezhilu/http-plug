@@ -439,7 +439,7 @@ const listPageHtml = function(title, back, folderPath, content) {
             tr td:nth-child(1){
                 min-width: 200px;
                 max-width: 700px;
-                word-break: break-all
+                word-break: break-all;
                 display: flex;
                 align-items: center;
             }

@@ -13,7 +13,7 @@ const net = require('net')
 配置
 *******************************************/
 //用户自定义端口
-let version = 'v1.0.10'
+let version = 'v0.2.0'
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
 let isLog = false // 是否打印访问日志
@@ -368,12 +368,12 @@ const listPageHtml = function(title, back, folderPath, content) {
                 word-break: break-all
             }
 
-            h1 a {
+            a {
                 color: #2f353d;
             }
 
-            h1 a:hover {
-                color: #275085;
+            a:hover {
+                color: #eeb92b;
             }
 
             table {
@@ -387,10 +387,10 @@ const listPageHtml = function(title, back, folderPath, content) {
                 margin: 0;
                 background-color: #fff;
                 border-radius: 8px;
+                border-bottom: 1px solid #eff1f3;
             }
 
             tr:nth-child(even) {
-                /* background-color: #f4f4f4; */
             }
 
             tr:hover {
@@ -406,14 +406,13 @@ const listPageHtml = function(title, back, folderPath, content) {
             th {
                 padding: 4px;
                 margin: 0;
+                color:#9b9c9e;
             }
 
             td a {
                 font-size: 16px;
                 box-lines: 22px;
-                display: flex;
                 align-items: center;
-                color: #2f353d;
                 font-weight: 900;
             }
 
@@ -427,27 +426,7 @@ const listPageHtml = function(title, back, folderPath, content) {
 
             }
 
-            tr td:nth-child(1) {
-                min-width: 200px;
-                max-width: 700px;
-                word-break: break-all
-            }
 
-            .folder {
-                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwM0NCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwM0RCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2NEY3RDk3RkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2NEY3RDk4MEI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtFJd1YAAAAYUExURd3d3mx8j42aqfj5+rW6wGV2il1vhP///x7OQvkAAAAIdFJOU/////////8A3oO9WQAAAGlJREFUeNrs1jEOgDAMQ1Enbdz73xgJJkQTySOQvz91c4olh98TuMW9WZMx+aw0ACkaOFUDY2LGrpNEQhibzFGR9HWZEDpxnZhOokmTJk1eT0xfS9c3Gfryrynel/0RT7uu2If+MIcAAwAjSzu4D8MtOQAAAABJRU5ErkJggg==') no-repeat 0 0;
-                background-size: 100% 100%;
-            }
-
-            .file {
-                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjRGN0Q5N0RCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjRGN0Q5N0VCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2NEY3RDk3QkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2NEY3RDk3Q0I3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pvz31UUAAAAYUExURenr7mR3jIuZqXeIm7/H0JqmtFpuhf///7mCQO0AAAAIdFJOU/////////8A3oO9WQAAAKVJREFUeNrs1tEKwCAIBVBLq///441RZkvD3r2PtRMSI4XGoZy2FGhbeAmwaklgEqhWyCCQviNxjW46Kd/erwjIqulfJa0CrpY08q5jM8lqJikHshgnkcZLhHGTafyEzQUZ/84FqdlD8mocpAGNoJeI4D0pQYIECRLEaK/HB1Zv4iI0Dz2NCrID1Fn6cSDhJKWLdXMMOIcrDsI2j+kj3EgWd/MIMADRrD7NdGLHkQAAAABJRU5ErkJggg==') no-repeat 0 0;
-                background-size: 100% 100%;
-            }
-
-            .html_file {
-                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDBCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDFCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTAzRUI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTAzRkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoriNEEAAAAYUExURW/X/fX8/6vo/ovf/tv1/2LT/VfQ/f///yRGgKwAAAAIdFJOU/////////8A3oO9WQAAALxJREFUeNrs1skOxSAIBVAEh///4ya1L1HBcmn6dr2bbjwhdUCp9WQpVrjpUP9w3YR3JNeKm06kBkwnxR7MprklV3WOENM4xDIeMYxLkjIu0XUAshqELAYis8HINAcY+dUJkfN4FJcIj4GIykfeJyJhwonCpC0GIYuxydrDJ2OSksac7Zpcorr2UAclw7XwXpXwvzyYMbUuJbqUmf6/xx7s5K9d7IlgRLBnz5gMPa6M+4bun3BDJF9DDwEGANP9OsC2Qk6FAAAAAElFTkSuQmCC') no-repeat 0 0;
-                background-size: 100% 100%;
-                
-            }
 
             .logo {
                 background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAAwCAMAAABufOK2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDRCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDVCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTA0MkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTA0M0I3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpkSyjYAAAAMUExURdLS0nx8fCUlJf///4YL0UUAAAAEdFJOU////wBAKqn0AAADb0lEQVR42uyb0YKrIAxEZ+T///lut9dWNAMJAu228ohY8DQmQ4hIIxpALrtGEunb2pAnxiIaLrwlm/Q1LsvFN4L3xowFau524fX40QtvH7zFN70Z7+1VeDR8Ld7ObH/Uw306fo1BYyLcH7zpwltTV33x8it97wDTfbJcPhbvKgPWkIKJtvtwBDW8tP8NJvGfi+7cRMwgKkfQWB520fgQnHmIM5hJ14s3v4bn3TG8Sb09x5kOI6w7sNM/u6eC8VsCL0fiRSWy6cewlyV0OVEV3nIErPGPacxl0lqBwLu8Ed7NU9HhBJ7dqG5s5IgiXlq0aYYatMQ1utp5vIfH8DqBezcK0bWAl0G81HT3eO85mS5bWzbvKmjjpYgIFN3K1qs+EIclVPFiF9G49me5BYYiVByvkXmLCAfbumW3eH4xUzbCEg5pkXhxQIP/PrxF6LY6B6fGpS0cKKxbdme/gxrebATrwiEZww+Gh9WWlgnNuf+VuqygSa3u/HcsvHJETJdB2g/SFLARvBV56ca7u9FAIEeYkQ1Sl0njfWu8eyWQCpLf6IatZCVeVPBSChrhrUJ4m9VYb7yobBFgdlgWJkfEZK/2DRG8pw4xA3hZmd+LN7MpLIaFyRExXZbNzMwgZuLla/Ay00VSl7FZl1Hg/d1WcJpzCOoydXdUl53YVfh0WTZzK95u2V6vLlNcorpM+yc5IqbLFrE7fku8GIkX1T8S2ws+XVbE++ayl6d12fB0pMKL2/7/r+EN6zIZWuWIYDpSpeLxSK/4PUST4G3SZeKdD+uydd21GMpy8NT5sn3GanM3ogmdE8cbMbzshJfemSoXFpnHq+N9nnEOx3s2HdmUL+uOF1rGYaumD8l0jnIOPJ5VWBuNXvmyDngz08jXtf03aUcL2ifFGCTVfCU6vfJlqS4H/efH2UY525vliXhs8Qm8aR5e+tOR5/JlDolSFGwsbgL1JcwrcvCV6HTXZb3wwnn0/Sq8vhqS7rrMqwCLzw/lkQvvu8TLN8DL1+GlyDVTqyiKQI7ZBWbVIodKHdej0Mu+bYxwoMWFBZNc14t59ZE+vH+rAtK4lF3DvPrTT8DbrXz6KvwfW53eGzBzZ/r5n61U8N4/Z5t9VvFFeFfEXT5su/AWIXu+dr2+d23D62686I7Ea34iS1kF/+ntnwADAJagn1Xt09BIAAAAAElFTkSuQmCC') no-repeat 0 0;
@@ -457,7 +436,13 @@ const listPageHtml = function(title, back, folderPath, content) {
                 flex-shrink: 0;
             }
 
-
+            tr td:nth-child(1){
+                min-width: 200px;
+                max-width: 700px;
+                word-break: break-all
+                display: flex;
+                align-items: center;
+            }
             tr td:nth-child(2){
                 width: 80px;
             }
@@ -477,7 +462,7 @@ const listPageHtml = function(title, back, folderPath, content) {
                     <span>${folderPath}</span>
                     </a> 
                 </h1>
-                <div class="logo"></div>
+                <a href="https://github.com/renzhezhilu/http-plug" target="_black"><div class="logo"></div></a>
             </header>
 
             <table>
@@ -556,18 +541,7 @@ function startServer() {
                         ext = path.parse(thisFile).base
                     }
                 }
-                let thisClassName = ''
-                switch (ext) {
-                    case 'html':
-                        thisClassName = 'html_file'
-                        break;
-                    case '':
-                        thisClassName = 'folder'
-                        break
-                    default:
-                        thisClassName = 'file'
-                        break;
-                }
+              
                 // 链接
                 let thisLink = url + file
                 // 名称
@@ -588,21 +562,71 @@ function startServer() {
                 }
                 // 文件数量
                 let thisCount = '-'
+                let thisClassName = ''
+                switch (ext) {
+                    case 'html':
+                        thisClassName = 'file_html'
+                        break;
+                    case '':
+                        thisClassName = 'folder'
+                        break
+                    default:
+                        thisClassName = 'file'
+                        break;
+                }
                 // 如果是文件夹
                 if (stats.isDirectory()) {
                     let files = fs.readdirSync(thisFile + '/')
                     files = filterFiles(files)
+                    if(files.some(s=>path.parse(s).ext.substr(1)==='html')) thisClassName = 'folder_html'
                     thisCount = files.length
                     thisSize = '-'
                     thisLink += '/'
                 }
+                let iconSvg = ''
+                if(thisClassName==='folder'){
+                    iconSvg =`
+                    <svg t="1594365202577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21498" width="200" height="200">
+                        <path d="M800 512H32V160c0-70.4 57.6-128 128-128h416l224 480z" fill="#5d6f83" p-id="21499"></path>
+                        <path d="M896 992H160c-70.4 0-128-57.6-128-128V320c0-70.4 57.6-128 128-128h736c70.4 0 128 57.6 128 128v544c0 70.4-57.6 128-128 128z" fill="#7b899c" p-id="21500"></path>
+                    </svg>
+                    `
+                }
+                else if(thisClassName==='folder_html'){
+                    iconSvg =`
+                    <svg t="1594365202577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21498" width="200" height="200">
+                        <path d="M800 512H32V160c0-70.4 57.6-128 128-128h416l224 480z" fill="#ffd76d" p-id="21499"></path>
+                        <path d="M896 992H160c-70.4 0-128-57.6-128-128V320c0-70.4 57.6-128 128-128h736c70.4 0 128 57.6 128 128v544c0 70.4-57.6 128-128 128z" fill="#eeb92b" p-id="21500"></path>
+                    </svg>
+                    `
+                }
+                else if(thisClassName==='file'){
+                    iconSvg =`
+                    <svg t="1594365294707" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24070" width="16" height="16">
+                        <path d="M725.333 0H196.267c-84.48 0-153.6 69.12-153.6 153.6v716.8c0 84.48 69.12 153.6 153.6 153.6h631.466c84.48 0 153.6-69.12 153.6-153.6V256l-256-256zM896 870.4c0 37.547-30.72 68.267-68.267 68.267H196.267c-37.547 0-68.267-30.72-68.267-68.267V153.6c0-37.547 30.72-68.267 68.267-68.267h409.6V307.2c0 37.547 30.72 68.267 68.266 68.267H896V870.4zM708.267 290.133c-9.387 0-17.067-7.68-17.067-17.066V85.333l204.8 204.8H708.267z" fill="#5d6f83" p-id="24071"></path>
+                        <path d="M588.8 716.8H298.667c-23.894 0-42.667 18.773-42.667 42.667s18.773 42.666 42.667 42.666H588.8c23.893 0 42.667-18.773 42.667-42.666S612.693 716.8 588.8 716.8zM256 571.733c0 23.894 18.773 42.667 42.667 42.667h426.666c23.894 0 42.667-18.773 42.667-42.667s-18.773-42.666-42.667-42.666H298.667c-23.894 0-42.667 18.773-42.667 42.666z" fill="#7b899c" p-id="24072"></path>
+                    </svg>
+                    `
+                }
+                else if(thisClassName==='file_html'){
+                    iconSvg =`
+                    <svg t="1594365294707" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24070" width="16" height="16">
+                        <path d="M725.333 0H196.267c-84.48 0-153.6 69.12-153.6 153.6v716.8c0 84.48 69.12 153.6 153.6 153.6h631.466c84.48 0 153.6-69.12 153.6-153.6V256l-256-256zM896 870.4c0 37.547-30.72 68.267-68.267 68.267H196.267c-37.547 0-68.267-30.72-68.267-68.267V153.6c0-37.547 30.72-68.267 68.267-68.267h409.6V307.2c0 37.547 30.72 68.267 68.266 68.267H896V870.4zM708.267 290.133c-9.387 0-17.067-7.68-17.067-17.066V85.333l204.8 204.8H708.267z" fill="#eeb92b" p-id="24071"></path>
+                        <path d="M588.8 716.8H298.667c-23.894 0-42.667 18.773-42.667 42.667s18.773 42.666 42.667 42.666H588.8c23.893 0 42.667-18.773 42.667-42.666S612.693 716.8 588.8 716.8zM256 571.733c0 23.894 18.773 42.667 42.667 42.667h426.666c23.894 0 42.667-18.773 42.667-42.667s-18.773-42.666-42.667-42.666H298.667c-23.894 0-42.667 18.773-42.667 42.666z" fill="#ffd76d" p-id="24072"></path>
+                    </svg>
+                    `
+                }
 
+                
                 content +=
                     `
                 <tr>
                     <td>
+                        <sapn class="icon">
+                            ${iconSvg}
+                        </sapn>
+                        
                         <a href="${thisLink}">
-                            <sapn class="icon ${thisClassName}"></sapn>
                             ${thisName}
                         </a>
                     </td>

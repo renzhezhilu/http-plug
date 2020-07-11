@@ -327,7 +327,7 @@ const listPageHtml = function(title, back, folderPath, content) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>${title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5MTVlMjZkMi1kMGI1LTRkOWMtOTI5YS1hODhjNTRkNzJmNDkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjRGRDFCQzlCQjg2MTFFQTgyMkZFQTM5Mzk1QzNBOEQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjRGRDFCQzhCQjg2MTFFQTgyMkZFQTM5Mzk1QzNBOEQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MTVlMjZkMi1kMGI1LTRkOWMtOTI5YS1hODhjNTRkNzJmNDkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OTE1ZTI2ZDItZDBiNS00ZDljLTkyOWEtYTg4YzU0ZDcyZjQ5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+yIMstwAAABhQTFRF////JCQk2dnZurq6QUFBmJiYY2Nj////P0MxsgAAAAh0Uk5T/////////wDeg71ZAAAA1klEQVR42uyXSQ7DIAwADV76/x83ENI6KhgwkXphjhET8IKE4XUCU1ySQ/3o4HNPG5xutsHrJhvc7mGvyZvN5h8wBcpgbyWyCGmCIpqmBAtKp2icIIYOApD/jg7Xklkv4xvlKwNQJXQWvmWGRENfGRP6uCJhjIFYOWrYrhQO7hso2onqlbnSUz86Frgrp7CPcuhsV3szlRlT4VyhSymzq8EaPTK2dZGpeXHtHom54Vp3Mh4ZkTtmmTebzZNP19X39tJL320vTDfwyFw1b+uJblK/nLcAAwCerAf2QdSKzAAAAABJRU5ErkJggg==">
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAEm0lEQVR4AWLQNjAHNGsOTLYkURBeI7z6Fc+2bdu2bdu2bdu2bdtj51YubzSrem7X9BeRDzOtLNc5ZaefhOoJrRS6IxQtBM2KFrojtFKontBPQl9ZyeqH3wi1EXothIDptVBboW/cjPwqtF8IulS7fhNMmDwdK9esx9r1mzBj9jx06tYbuQsUd7rvAL/Vzgh/cUWXgaYt2+H2nbuwIzY2Fus3bUHJspXtnsFv/c1o5FudNTFl+iykpKRAhujoGAwcOtLuWfv57aFG2ugyMXHKDHhh2co1yJg1j9Uz2/5r5Gd2Ij3Nqb2pJiKjotiE0G/QMNRp0BSt23fBoqUrWBMwsnP3PmTOkd9qAPiZRuroMMEPePzkKUI5fPQ4ChQpZXl90VIVcPXaDRg5d+EiipYsb7y+Co2s0mFk2KhxCOXIsRPmpmJQ1pwFaBZGIiIjMWvuQlSv3QC58xdDsdIVF9PIHb9NpM+SG48ePwltTqwJ6Zo8ePgoXLj7lY4Zu2HTVsaOq3R/puz5sGPXHsfBjUbgt7r06Ivde/f/p5p1G3t6zvDR4xEVFQ0rfDWybcdunDx91lE0qfJMzvhjJ0zGgUNHcOnKVRw+cgyz5y3yz0j2PIWRnJwMN3r2HRiO9/lnpG7D5pCB/SfQRoaNHAsZipeuFGwjXMm6kZSUhIzZ8gbbCGdlN16+esVrg2uEM3ZsXBzcuHDxcrCNVKxaGzJs37k72EZ69BkIGeYtXBJMI9lyFcTEKdMREREBGbi95TosMEY48gwePhpv372DKpyh8xUqmbZGWJrdevXjPsN5mHWZ4V+/eYvGzdukjZGWbTvhxs3bcIPLlGvXb0hdN2f+ItauPiNs27Js3LwNb95KNzkuBDnb6zFy/8FDyBATE4M2HbpClY5de/lvhFWfmJgIGabPmoepM+ZAlTIVqvlvpHzlmpCBHThb7kLg7E0IIyi3bt/BkuWruO+2rcUM3Mv7baR95x6Qoe/AochbqAQ+fPwEhnH4/0LFyoLPmDV3AWzgGk1DZ5cMsHE0Y6lmyZnfFCmp06CZ03DMGJceI5u3bocbTVq0td01Pnn6DE6MGjtRj5ErV687D5+Xr4IjFTv5vgOH8PDRYy5dZPcoDG7rMcKYlArHTpzifTQnFbhmvMt3I0VKlIMqI8dMQP7CpfDu/Xu4wWt8W6Jw3mjWqj2o0eMnQ5XS5auCTUwGbsY4wg0cMiL8RgoXLwevsH9w2FWFK4ewG6lRpxG8snf/QeU+RXbs3ht+I1zleoXpMy9wrlI34hLEZtPQTat2nVWNxLimFbh11YwhkSOlu66JnkHDRjHYrEvc+noZfhfTSF2HFDKHXe1iOEnRSBXbZGiufEWRGtRHK/X1ljEZSrU1XsD8nFdevXqNT58/wysVqtRSMdLO8cAAEzCpmD9SVQgKJg4YDwxQv/NYRDhGq/kLl0Id5f0Iv/UPp0M1B+1u/vz5C4xcvHRF6sWcrQ1wNcztsJdR6iC/VeaYE9vdG2PuzgputGRefv3mLct9vaKBN/w2+2NO7gfP7tWq1yQGZnhARuojrOLBZ89fdJ2x+W6Zg2d/Al2Skd0lfMAeAAAAAElFTkSuQmCC">
     </head>
 
     <body>
@@ -350,10 +350,9 @@ const listPageHtml = function(title, back, folderPath, content) {
             }
 
             .main {
-                width: 96%;
                 max-width: 1000px;
                 border-radius: 8px;
-                padding: 3%;
+                padding: 2vh 3vw;
                 background-color: #fff;
                 box-shadow: 0 30px 60px #eaedf9;
             }
@@ -432,10 +431,7 @@ const listPageHtml = function(title, back, folderPath, content) {
 
 
             .logo {
-                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAAwCAMAAABufOK2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTM2QUUwNDRCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTM2QUUwNDVCNzlCMTFFQUI3NURGNjY4MERBRjY4MzIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMzZBRTA0MkI3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMzZBRTA0M0I3OUIxMUVBQjc1REY2NjgwREFGNjgzMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpkSyjYAAAAMUExURdLS0nx8fCUlJf///4YL0UUAAAAEdFJOU////wBAKqn0AAADb0lEQVR42uyb0YKrIAxEZ+T///lut9dWNAMJAu228ohY8DQmQ4hIIxpALrtGEunb2pAnxiIaLrwlm/Q1LsvFN4L3xowFau524fX40QtvH7zFN70Z7+1VeDR8Ld7ObH/Uw306fo1BYyLcH7zpwltTV33x8it97wDTfbJcPhbvKgPWkIKJtvtwBDW8tP8NJvGfi+7cRMwgKkfQWB520fgQnHmIM5hJ14s3v4bn3TG8Sb09x5kOI6w7sNM/u6eC8VsCL0fiRSWy6cewlyV0OVEV3nIErPGPacxl0lqBwLu8Ed7NU9HhBJ7dqG5s5IgiXlq0aYYatMQ1utp5vIfH8DqBezcK0bWAl0G81HT3eO85mS5bWzbvKmjjpYgIFN3K1qs+EIclVPFiF9G49me5BYYiVByvkXmLCAfbumW3eH4xUzbCEg5pkXhxQIP/PrxF6LY6B6fGpS0cKKxbdme/gxrebATrwiEZww+Gh9WWlgnNuf+VuqygSa3u/HcsvHJETJdB2g/SFLARvBV56ca7u9FAIEeYkQ1Sl0njfWu8eyWQCpLf6IatZCVeVPBSChrhrUJ4m9VYb7yobBFgdlgWJkfEZK/2DRG8pw4xA3hZmd+LN7MpLIaFyRExXZbNzMwgZuLla/Ay00VSl7FZl1Hg/d1WcJpzCOoydXdUl53YVfh0WTZzK95u2V6vLlNcorpM+yc5IqbLFrE7fku8GIkX1T8S2ws+XVbE++ayl6d12fB0pMKL2/7/r+EN6zIZWuWIYDpSpeLxSK/4PUST4G3SZeKdD+uydd21GMpy8NT5sn3GanM3ogmdE8cbMbzshJfemSoXFpnHq+N9nnEOx3s2HdmUL+uOF1rGYaumD8l0jnIOPJ5VWBuNXvmyDngz08jXtf03aUcL2ifFGCTVfCU6vfJlqS4H/efH2UY525vliXhs8Qm8aR5e+tOR5/JlDolSFGwsbgL1JcwrcvCV6HTXZb3wwnn0/Sq8vhqS7rrMqwCLzw/lkQvvu8TLN8DL1+GlyDVTqyiKQI7ZBWbVIodKHdej0Mu+bYxwoMWFBZNc14t59ZE+vH+rAtK4lF3DvPrTT8DbrXz6KvwfW53eGzBzZ/r5n61U8N4/Z5t9VvFFeFfEXT5su/AWIXu+dr2+d23D62686I7Ea34iS1kF/+ntnwADAJagn1Xt09BIAAAAAElFTkSuQmCC') no-repeat 0 0;
-                background-size: 100% auto;
-                width: 146px;
-                height: 22px;
+                
                 flex-shrink: 0;
             }
 
@@ -461,11 +457,13 @@ const listPageHtml = function(title, back, folderPath, content) {
             <header>
                 <h1>
                     <a href="${back}">↵
-                    PATH: 
+                    path: 
                     <span>${folderPath}</span>
                     </a> 
                 </h1>
-                <a href="https://github.com/renzhezhilu/http-plug" target="_black"><div class="logo"></div></a>
+                <a href="https://github.com/renzhezhilu/http-plug" target="_black"><div class="logo">
+                <img width="36" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAGFBMVEX///8rMDebnqHb3N1wdHlKTlS9v8H///8gM2lwAAAACHRSTlP/////////AN6DvVkAAAUOSURBVHja3Z3bct0gDEV15///uO20HdokBiQcS2Y9h5muA+wNPpdCmwPptDlQXKKzIwLFCIpAQQIiUBSnCBTGIQLFWRWB8qyJwAtYEIEc2Ix+YcYxFSjgYaL4LypkbhPI9iDBLxFilwmkejDhADGHCWR6CE5QWjaBPA9TnKO2aAJZHiy4hvCSCSR5mOIyBNdkixB6EHaIVPTo2NQESnt0aGYCtT06AlekiRCGkBUReBDDIHq15XNEGMMoz0TgQRQH6E8CJl0k/3ilQsZ/ryZyacNDkfQNosSj4p8XyuMiPDsXzlXoWgSeQzzHW3KYPCxiK+3QYV0plC6SmVgUiQblL0UyK92CIUefTSBzQjh8nlFLFKHBfLhNUCxNROf7Y2AyaZ/EyBLPTI7OAz8xyjtk6b3nfk6bEIJbTSyr1PXmOwxlnbIM7jWRpOzVu++VmrTVCW420aSVdf9dP2dlCQRgLSAit2SM5IvcVF+ULWLyPxCF1SFSG3KIFIf0cRHDFSIr9eFmJ1xAIYKRqONt+U0EFxCIw8zwBOoQKQ2uQFAewxUMykOniAiuwFAexRVO2esK5eFTRAwPqRE6pUbkFBE8pEYYD6kRw0NqhE4RkVNqRE+pETxExPA9NTKETqkROUVET+lDPKRGGA+pETtFhE6pETmlRvAQEcZDasTwkBqhU2pEzhDhVQ99t0ZHDtConlqEPqSqhhvl+u/kv7TdTTGIFNOIo1YsquJQMY04ysU04tgrEldxjtTXQCm+vEhXUwnXoOKJS4KLSGUNVHD8rRXuP+OylULoQIDKVoqiAwYpWynOI2HZEwv7JsTKipjv3yToxertdR3sqPznduJ6bRndQDkRDV3ktV76WmhlSbn0lR5x705f7hFXMbTMtUQE3XC19B2sQ6EXhRZdrEMlA5D3hJb26fv8+4v2otCyT9ZKBr9hfU9o6f9/rGLQkReFFv+zsoTYERfwEORpZ0EV882plvxaCLE7LQQGPB5aFJ9SqhRauhEWVim0aGNGuVBoqWNhlQ4tc7wOlUNLdqJCComwY3ReaKlvQphEybPBrE768sevarMn8bhM+lJ3+I26DgVQJn3/OHTEE3ha+OMmNpjMzNByM4iJ1NDyIjW/FY5uyHWxLPy7w+yZSq37Q9Dq2ltSN7TI9QJQ3dAyV0ZY3dAa+Ofec52Id2cpGXwX3AltkT4qV4ZxA46dBjQzcvffROxINREKTigldMdsZSkGsGoi0dE1SrAjwXWp1UQMtNCnzBXDRF8EKiaiVurTzBiGFGNwsWJXDAKlROJojUvhPnKKCNW43e5jp4jUuKbvo6eISM7zhjhX0CkiBt8CPg6fUuwQodUT0ZDGXESfhoIiB3CWSDvCYyzCedwropgFBUQGJpgGOz3GIowb6F6ThETad1wN5cHjb5uIUJqIBUXaN4hsDXZ6zEQE48jOYA2LtNvTl+Sx8G1TEdyAdWdwXKTdnL4Kj22R+X/9bxhH+KnwbR9F2q0iZg9tkbYgQhhnazDvibQb01e3Brs8ukjnvvSlHRFxeXSRS5OtxaFPnE/alUi7S2RrsNuji3TG90PBLzH+yFeDL7Y/hS+HbSTSYITspAwNBkdoY5EWeAq89VA/7DET8d/hdetZ+K5GF3GYbMXlne/ptDWR5rvD086zcNn26CLLKuYQ8Q6Oa3SRZRXyF9h8cFBjLtKpmL6tOUQ61dK3DYA2pk76tjHQ5uSnb5vzA8XkaynbehbtAAAAAElFTkSuQmCC" >
+                </div></a>
             </header>
 
             <table>

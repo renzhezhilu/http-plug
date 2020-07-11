@@ -7,6 +7,7 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 const net = require('net')
+var os = require('os');
 
 
 /******************************************
@@ -14,9 +15,10 @@ const net = require('net')
 *******************************************/
 //用户自定义端口
 let version = 'v0.2.4'
-let port = 9527 // 端口
+let host = '0.0.0.0' //localhost
+let port = 6222 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
-let isLog = false // 是否打印访问日志
+let isLog = true // 是否打印访问日志
 let isPkg = false // 当前模式是否pkg打包
 
 // 命令行
@@ -143,7 +145,7 @@ const canUseProt = function(intPort) {
                 console.log(`🚫 端口 ${intPort} 不可用！`);
                 resolve(false)
             } else {
-                testProt.listen(intPort, 'localhost', () => {
+                testProt.listen(intPort, host, () => {
                     console.log(`☑️ 端口 ${intPort} 可用`);
                     testProt.close()
                     resolve(true)
@@ -325,6 +327,7 @@ const listPageHtml = function(title, back, folderPath, content) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>${title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5MTVlMjZkMi1kMGI1LTRkOWMtOTI5YS1hODhjNTRkNzJmNDkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjRGRDFCQzlCQjg2MTFFQTgyMkZFQTM5Mzk1QzNBOEQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjRGRDFCQzhCQjg2MTFFQTgyMkZFQTM5Mzk1QzNBOEQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MTVlMjZkMi1kMGI1LTRkOWMtOTI5YS1hODhjNTRkNzJmNDkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OTE1ZTI2ZDItZDBiNS00ZDljLTkyOWEtYTg4YzU0ZDcyZjQ5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+yIMstwAAABhQTFRF////JCQk2dnZurq6QUFBmJiYY2Nj////P0MxsgAAAAh0Uk5T/////////wDeg71ZAAAA1klEQVR42uyXSQ7DIAwADV76/x83ENI6KhgwkXphjhET8IKE4XUCU1ySQ/3o4HNPG5xutsHrJhvc7mGvyZvN5h8wBcpgbyWyCGmCIpqmBAtKp2icIIYOApD/jg7Xklkv4xvlKwNQJXQWvmWGRENfGRP6uCJhjIFYOWrYrhQO7hso2onqlbnSUz86Frgrp7CPcuhsV3szlRlT4VyhSymzq8EaPTK2dZGpeXHtHom54Vp3Mh4ZkTtmmTebzZNP19X39tJL320vTDfwyFw1b+uJblK/nLcAAwCerAf2QdSKzAAAAABJRU5ErkJggg==">
     </head>
 
     <body>
@@ -496,14 +499,14 @@ async function GO() {
         port = await canUseProt()
         startServer()
     }
-    openUrl(`http://localhost:${port}`)
-    console.log(`如未自动打开，请访问：http://localhost:${port}`);
-
+    openUrl(`http://${host}:${port}`)
+    console.log(`如未自动打开，请访问：http://${host}:${port}`);
+    console.log(`局域网内可访问：http://${os.networkInterfaces().en0[1].address}:${port}`);
 }
 // 启动服务
 function startServer() {
     let server = new http.Server();
-    server.listen(port, 'localhost');
+    server.listen(port, host);
     server.on('request', function(req, res) {
         // 响应请求
         let {

@@ -22,19 +22,15 @@
 
 
 
-<h1 align="center">http-plug</h1>
+<h1>http-plug</h1>
 
-<h3 align="center">基于node实现的无依赖http静态服务器。</h3>
-
-
-
-### http-plug有以下几点特点。
+<h3 >基于node实现的无依赖http静态服务器。</h3>
 
 * [x] 非常迷你, 无依赖, 30KB不到
 * [x] 全局命令, 哪里需要点哪里
 * [ ] html页面改动实时刷新
 
-
+---
 ### 介绍
 
 &emsp; &emsp; 一开始我使用[xammp](https://www.apachefriends.org/)里的web server做静态服务器，需求很简单，就是偶尔调试下html。首先我得先把文件拷贝到web server指定的目录下才能访问，虽然可以设置路径，但还是觉得麻烦。

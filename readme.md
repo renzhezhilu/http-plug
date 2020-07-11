@@ -1,7 +1,8 @@
 <p align="center">
-<img src=". /psd/logo. png">
-<img src=". /psd/http-plug-UI02. png">
+<img src="./psd/logo.png">
+<img src="./psd/http-plug-UI02.png">
 </p>
+
 
 <p align="center">
 <a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://img.shields.io/bundlephobia/min/http-plug?style=for-the-badge"></a>
@@ -46,7 +47,7 @@
 #### 全局安装(推荐)
 
 
-<img src="./psd/http-plug-demo. gif">
+<img src="./psd/http-plug-demo.gif">
 
 ``` 
 npm i http-plug -g

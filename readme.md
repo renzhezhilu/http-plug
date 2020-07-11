@@ -17,7 +17,7 @@
 
 
 <p align="center">
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-ui.png">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-newui.png">
 </p>
 
 

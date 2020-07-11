@@ -45,7 +45,8 @@
 
 #### 全局安装(推荐)
 
-![title](. /psd/http-plug-demo. gif)
+
+<img src="./psd/http-plug-demo. gif">
 
 ``` 
 npm i http-plug -g
@@ -85,16 +86,20 @@ npx http-plug
 
 得益于只使用node原生模块，提供了更多的灵活性
 
-可直接下载主文件[http-plug. js](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/http-plug.js)文件，放置项目，接着cd这个项目输入
+下载主文件[http-plug. js](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/http-plug.js)文件，放置项目根目录，接着cd这个项目输入下面即可
 
 ``` 
 node http-plug.js
 ```
 
 ## 03. 桌面客户端
+使用[pkg](https://github.com/vercel/pkg)-node8生成。
+软件所在的根目录即为服务器的根目录。
 
-[windows7/10](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-win.exe)
+> 把整个node都打包了，虽然是用了8.0版本的node，但还是很大。
 
-[macOS](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-macos)
+[下载 windows7/10(23.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-win.exe)
 
-[linux](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-linux)
+[下载 macOS(35.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-macos)
+
+[下载 linux(34.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-linux)

@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/logo.png">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/logo/logo.svg">
 </p>
 
 <p align="center">

@@ -4,9 +4,9 @@
 
 <p align="center">
 <a href="https://www.npmjs.com/package/http-plug">
-<img alt="npm" src="https://img.shields.io/npm/v/http-plug?color=eeb930&logo=npm&style=flat-square">
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/http-plug?color=eeb930">
-<img alt="node-current" src="https://img.shields.io/node/v/http-plug?color=7a8a9d">
+<img alt="npm" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/size.svg">
+<img alt="npm bundle size" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/ver.svg">
+<img alt="node-current" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/platform.svg">
 </a>
 
 <a href="#03.桌面客户端">

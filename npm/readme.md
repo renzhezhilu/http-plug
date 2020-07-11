@@ -1,22 +1,11 @@
 <p align="center">
 <img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/logo.png">
-</p>
 
 <p align="center">
-<a href="https://www.npmjs.com/package/http-plug">
-<img alt="npm" src="https://img.shields.io/npm/v/http-plug?color=eeb930&logo=npm&style=flat-square">
-<img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/http-plug?color=eeb930">
-<img alt="node-current" src="https://img.shields.io/node/v/http-plug?color=7a8a9d">
-</a>
 
-<a href="#03.桌面客户端">
+<a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://nodei.co/npm/http-plug.png?compact=true"></a>
+<a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://nodei.co/npm/http-plug.png?mini=true"></a>
 
-<img alt="platform" src="https://img.shields.io/badge/platform-Node%20%7C%20Windows%20%7C%20MacOS%20%7C%20Linux-%23989898">
-</a>
-</p>
-
-
-<p align="center">
 <img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI02.png">
 </p>
 
@@ -25,15 +14,6 @@
 <h1 align="center">http-plug</h1>
 
 <h3 align="center">基于node实现的无依赖http静态服务器。</h3>
-
-
-
-### http-plug有以下几点特点。
-
-* [x] 非常迷你, 无依赖, 30KB不到
-* [x] 全局命令, 哪里需要点哪里
-* [ ] html页面改动实时刷新
-
 
 ### 介绍
 
@@ -47,18 +27,23 @@
 
 &emsp; &emsp; 接着我本着尽可能简单的原则，只使用node自带模块来开发这个工具
 
+### http-plug有以下几点优势。
+
+* [x] 非常迷你, 无依赖, 30KB不到
+* [x] 全局命令, 哪里需要点哪里
+* [ ] html页面改动实时刷新
 
  
 
 # 安装
 
-[01.模块安装](#01.模块安装)
+[01. 模块安装](#01. 模块安装)
 
-[02.单文件运行](#02.单文件运行)
+[02. 单文件运行](#02. 单文件运行)
 
-[03.桌面客户端](#03.桌面客户端)
+[03. 桌面客户端](#03. 桌面客户端)
 
-## 01.模块安装
+## 01. 模块安装
 
 #### 全局安装(推荐)
 
@@ -99,7 +84,7 @@ npm i http-plug --save-dev
 npx http-plug
 ```
 
-## 02.单文件运行
+## 02. 单文件运行
 
 得益于只使用node原生模块，提供了更多的灵活性
 
@@ -109,7 +94,7 @@ npx http-plug
 node http-plug.js
 ```
 
-## 03.桌面客户端
+## 03. 桌面客户端
 使用[pkg](https://github.com/vercel/pkg)-node8生成。
 软件所在的根目录即为服务器的根目录。
 

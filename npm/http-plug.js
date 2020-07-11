@@ -13,7 +13,7 @@ const net = require('net')
 配置
 *******************************************/
 //用户自定义端口
-let version = 'v0.2.0'
+let version = 'v0.2.4'
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
 let isLog = false // 是否打印访问日志
@@ -439,7 +439,7 @@ const listPageHtml = function(title, back, folderPath, content) {
             tr td:nth-child(1){
                 min-width: 200px;
                 max-width: 700px;
-                word-break: break-all
+                word-break: break-all;
                 display: flex;
                 align-items: center;
             }

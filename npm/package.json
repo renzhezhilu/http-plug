@@ -1,7 +1,7 @@
 {
     "name": "http-plug",
-    "version": "0.2.0",
-    "description": "无依赖的迷你静态服务器，主要做html测试",
+    "version": "0.2.4",
+    "description": "Easy-to-use full platform static server，无依赖的迷你静态服务器，主要做html调试",
     "main": "http-plug.js",
     "config": {
         "port": "9527"
@@ -15,7 +15,7 @@
     },
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "git@github.com:renzhezhilu/http-plug.git"
     },
     "keywords": ["static", "static server", "static web server", "mini web server", "http-plug", "html web server", "html debug", "web server"],
     "author": {

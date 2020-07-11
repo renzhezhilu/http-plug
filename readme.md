@@ -1,7 +1,5 @@
 <p align="center">
 <img src="./psd/logo.png">
-<img src="./psd/http-plug-UI02.png">
-</p>
 
 
 <p align="center">
@@ -9,6 +7,9 @@
 <a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://img.shields.io/npm/v/http-plug?style=for-the-badge"></a>
 <img src="https://img.shields.io/npm/l/http-plug?style=for-the-badge">
 </p>
+<img src="./psd/http-plug-UI02.png">
+</p>
+
 
 <h1 align="center">http-plug</h1>
 

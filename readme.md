@@ -27,9 +27,9 @@
 
 <h3 >基于node实现的无依赖http静态服务器。</h3>
 
-* [x] 非常迷你, 无依赖, 30KB不到
-* [x] 全局命令, 哪里需要点哪里
-* [ ] html页面改动实时刷新
+- [x] 非常迷你, 无依赖, 30KB不到
+- [x] 全局命令, 哪里需要点哪里
+- [ ] html页面改动实时刷新
 
 ---
 ### 介绍
@@ -57,7 +57,7 @@
 
 ## 01.模块安装
 
-### 全局安装(推荐)
+### 全局安装(🚀推荐)
 
 全局环境下安装 `plug` 命令，安装完成之后，我们就可以在任何地方执行 `plug` 命令了
 ``` 
@@ -128,7 +128,7 @@ node http-plug.js
 ### 命令行
 
 <p align="center">
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI-what.png">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/shell.png">
 </p>
 
 # 安全性

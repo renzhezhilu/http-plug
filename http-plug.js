@@ -16,7 +16,7 @@ var os = require('os');
 //用户自定义端口
 let version = 'v0.2.4'
 let host = '0.0.0.0' //localhost
-let port = 6222 // 端口
+let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
 let isLog = true // 是否打印访问日志
 let isPkg = false // 当前模式是否pkg打包
@@ -276,7 +276,7 @@ function processReturn() {
         return  console.log(
             `
 plug                    打开http-plug(默认端口9527)
-plug 8888               使用8888端口打开（失败后则重新随机分配）
+plug 8888               使用8888端口打开（失败后则重新随机分配可用端口）
 plug -l | -L            打印日志 
 plug 8888 -l | -L       指定端口并打印日志 
 plug -v | -V            查看版本
@@ -350,7 +350,7 @@ const listPageHtml = function(title, back, folderPath, content) {
             }
 
             .main {
-                max-width: 1000px;
+                width:666px;
                 border-radius: 8px;
                 padding: 2vh 3vw;
                 background-color: #fff;
@@ -497,8 +497,8 @@ async function GO() {
         port = await canUseProt()
         startServer()
     }
-    openUrl(`http://${host}:${port}`)
-    console.log(`如未自动打开，请访问：http://${host}:${port}`);
+    openUrl(`http://127.0.0.1:${port}`)
+    console.log(`如未自动打开，请访问：http://127.0.0.1:${port}`);
     console.log(`局域网内可访问：http://${os.networkInterfaces().en0[1].address}:${port}`);
 }
 // 启动服务

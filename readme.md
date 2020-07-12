@@ -3,15 +3,16 @@
 </p>
 
 <p align="center">
+<img alt="npm" src="https://img.shields.io/npm/v/http-plug?color=eeb930&logo=npm&style=flat-square">
 <a href="https://www.npmjs.com/package/http-plug">
 <img alt="npm" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/size.svg">
 <img alt="npm bundle size" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/ver.svg">
-<img alt="node-current" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/platform.svg">
+
 </a>
 
 <a href="#03.桌面客户端">
 
-<img alt="platform" src="https://img.shields.io/badge/platform-Node%20%7C%20Windows%20%7C%20MacOS%20%7C%20Linux-%23989898">
+<img alt="node-current" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/platform.svg">
 </a>
 </p>
 
@@ -56,16 +57,14 @@
 
 ## 01.模块安装
 
-#### 全局安装(推荐)
+### 全局安装(推荐)
 
-
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
-
+全局环境下安装 `plug` 命令，安装完成之后，我们就可以在任何地方执行 `plug` 命令了
 ``` 
 npm i http-plug -g
 ```
 
-> 我的实际输入：sudo [cnpm](https://developer.aliyun.com/mirror/NPM?from=tnpm) i http-plug -g
+> 我的实际输入(macOS)：sudo [cnpm](https://developer.aliyun.com/mirror/NPM?from=tnpm) i http-plug -g
 
 进入任意文件夹下输入
 
@@ -81,7 +80,10 @@ plug
 plug -h
 ```
 
-#### 局部安装
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
+
+
+### 局部安装
 
 进入项目文件夹输入
 
@@ -106,13 +108,28 @@ node http-plug.js
 ```
 
 ## 03.桌面客户端
-使用[pkg](https://github.com/vercel/pkg)-node8生成。
+使用[pkg](https://github.com/vercel/pkg)生成。
 软件所在的根目录即为服务器的根目录。
 
-> 把整个node都打包了，虽然是用了8.0版本的node，但还是很大。
+> pkg把整个node都打包了，虽然是用了8.0版本的node，但还是很大😒。
 
 [下载 windows7/10(23.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-win.exe)
 
 [下载 macOS(35.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-macos)
 
 [下载 linux(34.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-linux)
+
+# 使用
+### 界面说明
+<p align="center">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI-what.png">
+</p>
+
+### 命令行
+
+<p align="center">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI-what.png">
+</p>
+
+# 安全性
+http-plug本意是用来开发时调试使用，避免

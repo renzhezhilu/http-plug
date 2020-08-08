@@ -14,7 +14,7 @@ var os = require('os');
 配置
 *******************************************/
 // 用户自定义
-let version = 'v0.2.9'
+let version = 'v0.2.11'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’

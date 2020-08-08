@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-// 通用-截流
+// 通用-截      流
 let everyTime = {
     f: function(time = 1000, cd) {
         if (this.b) {
@@ -27,16 +27,15 @@ let everyTime2 = {
 }
 
 
-
 fs.watch('./change', {
     recursive: true
 }, (event, filename) => {
-    // everyTime.f(600,()=>{
-    //     console.log(1233);
-    //     console.log(`${event}--${filename}文件发生更新`)
-    // })
-    everyTime2.f(2000, () => {
+    everyTime.f(600,()=>{
         console.log(1233);
-        console.log(`${event}--${new Date()}文件发生更新`)
+        console.log(`${event}--${filename}文件发生更新`)
     })
+    // everyTime2.f(2000, () => {
+    //     console.log(1233);
+    //     console.log(`${event}--${new Date()}文件发生更新`)
+    // })
 })

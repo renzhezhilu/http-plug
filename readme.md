@@ -27,9 +27,11 @@
 
 <h3 >基于node实现的无依赖http静态服务器。</h3>
 
+- [x] 文件改动时html页面会实时刷新
 - [x] 非常迷你, 无依赖, 30KB不到
 - [x] 全局命令, 哪里需要点哪里
-- [ ] html页面改动实时刷新
+- [ ] 可设置账户登录
+- [ ] 搜索文件
 
 ---
 ### 介绍
@@ -41,6 +43,7 @@
 &emsp; &emsp; 难道就没有一个可以非常便捷的在任意目录下创建静态服务器的工具吗？
 
 &emsp; &emsp; 就像一个插头🔌, 插上马上就能用。
+> 有啊，[light-server](https://www.npmjs.com/package/light-server) 😒2020-08-08
 
 &emsp; &emsp; 接着我本着尽可能简单的原则，只使用node自带模块来开发这个工具
 
@@ -76,11 +79,21 @@ plug
 
 使用 `-h`  `-H`  `-help` 获取更多使用帮助
 
-``` 
+```shell
 plug -h
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
+可用的命令 
+```javascript
+plug                    打开http-plug(默认端口9527)
+plug 8888               使用8888端口打开（失败后则重新随机分配可用端口）
+plug -l | -L            打印日志 
+plug 8888 -l | -L       指定端口并打印日志 
+plug -v | -V            查看版本
+plug -h | -H            帮助
+```
+
+<img width="600" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
 
 
 ### 局部安装
@@ -101,7 +114,7 @@ npx http-plug
 
 得益于只使用node原生模块，提供了更多的灵活性
 
-下载主文件[http-plug. js](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/http-plug.js)文件，放置项目根目录，接着cd这个项目输入下面即可
+下载[主文件http-plug. js](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/http-plug.js)文件，放置项目根目录，接着cd这个项目输入下面即可
 
 ``` 
 node http-plug.js
@@ -119,6 +132,20 @@ node http-plug.js
 
 [下载 linux(34.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-linux)
 
+<!-- # 文件说明
+```
+|_ doc/         文档记录
+|_ html/        html模版
+|_ npm/         npm模块
+|_ pkg/         桌面客户端
+|_ psd/         相关设计
+|_ test/        乱七八糟的测试
+|_ .gitignore   
+|_ http-plug.js 主文件
+|_ readme.md
+
+``` -->
+
 # 使用
 ### 界面说明
 <p align="center">
@@ -132,4 +159,6 @@ node http-plug.js
 </p>
 
 # 安全性
-http-plug本意是用来开发时调试使用，避免
+http-plug本意是用来开发时调试使用，避免用在生产环境。
+
+# end

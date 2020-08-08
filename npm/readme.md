@@ -1,20 +1,38 @@
 <p align="center">
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/logo.png">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/logo/logo.svg">
+</p>
 
 <p align="center">
+<img alt="npm" src="https://img.shields.io/npm/v/http-plug?color=eeb930&logo=npm&style=flat-square">
+<a href="https://www.npmjs.com/package/http-plug">
+<img alt="npm" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/size.svg">
+<img alt="npm bundle size" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/ver.svg">
 
-<a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://nodei.co/npm/http-plug.png?compact=true"></a>
-<a href="https://www.npmjs.com/package/http-plug" target="_blank"><img src="https://nodei.co/npm/http-plug.png?mini=true"></a>
+</a>
 
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI02.png">
+<a href="#03.桌面客户端">
+
+<img alt="node-current" src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/tab/platform.svg">
+</a>
+</p>
+
+
+<p align="center">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-newui.png">
 </p>
 
 
 
-<h1 align="center">http-plug</h1>
+<h1>http-plug</h1>
 
-<h3 align="center">基于node实现的无依赖http静态服务器。</h3>
+<h3 >基于node实现的无依赖http静态服务器。</h3>
 
+- [x] 非常迷你, 无依赖, 30KB不到
+- [x] 全局命令, 哪里需要点哪里
+- [x] html页面改动实时刷新
+- [ ] 可设置账户登录
+
+---
 ### 介绍
 
 &emsp; &emsp; 一开始我使用[xammp](https://www.apachefriends.org/)里的web server做静态服务器，需求很简单，就是偶尔调试下html。首先我得先把文件拷贝到web server指定的目录下才能访问，虽然可以设置路径，但还是觉得麻烦。
@@ -27,34 +45,27 @@
 
 &emsp; &emsp; 接着我本着尽可能简单的原则，只使用node自带模块来开发这个工具
 
-### http-plug有以下几点优势。
-
-* [x] 非常迷你, 无依赖, 30KB不到
-* [x] 全局命令, 哪里需要点哪里
-* [ ] html页面改动实时刷新
 
  
 
 # 安装
 
-[01. 模块安装](#01. 模块安装)
+[01.模块安装](#01.模块安装)
 
-[02. 单文件运行](#02. 单文件运行)
+[02.单文件运行](#02.单文件运行)
 
-[03. 桌面客户端](#03. 桌面客户端)
+[03.桌面客户端](#03.桌面客户端)
 
-## 01. 模块安装
+## 01.模块安装
 
-#### 全局安装(推荐)
+### 全局安装(🚀推荐)
 
-
-<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
-
+全局环境下安装 `plug` 命令，安装完成之后，我们就可以在任何地方执行 `plug` 命令了
 ``` 
 npm i http-plug -g
 ```
 
-> 我的实际输入：sudo [cnpm](https://developer.aliyun.com/mirror/NPM?from=tnpm) i http-plug -g
+> 我的实际输入(macOS)：sudo [cnpm](https://developer.aliyun.com/mirror/NPM?from=tnpm) i http-plug -g
 
 进入任意文件夹下输入
 
@@ -70,7 +81,10 @@ plug
 plug -h
 ```
 
-#### 局部安装
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-demo.gif">
+
+
+### 局部安装
 
 进入项目文件夹输入
 
@@ -84,7 +98,7 @@ npm i http-plug --save-dev
 npx http-plug
 ```
 
-## 02. 单文件运行
+## 02.单文件运行
 
 得益于只使用node原生模块，提供了更多的灵活性
 
@@ -94,14 +108,43 @@ npx http-plug
 node http-plug.js
 ```
 
-## 03. 桌面客户端
-使用[pkg](https://github.com/vercel/pkg)-node8生成。
+## 03.桌面客户端
+使用[pkg](https://github.com/vercel/pkg)生成。
 软件所在的根目录即为服务器的根目录。
 
-> 把整个node都打包了，虽然是用了8.0版本的node，但还是很大。
+> pkg把整个node都打包了，虽然是用了8.0版本的node，但还是很大😒。
 
 [下载 windows7/10(23.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-win.exe)
 
 [下载 macOS(35.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-macos)
 
 [下载 linux(34.8MB)](https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/pkg/dist/http-plug-linux)
+
+<!-- # 文件说明
+```
+|_ doc/         文档记录
+|_ html/        html模版
+|_ npm/         npm模块
+|_ pkg/         桌面客户端
+|_ psd/         相关设计
+|_ test/        乱七八糟的测试
+|_ .gitignore   
+|_ http-plug.js 主文件
+|_ readme.md
+
+``` -->
+
+# 使用
+### 界面说明
+<p align="center">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/http-plug-UI-what.png">
+</p>
+
+### 命令行
+
+<p align="center">
+<img src="https://cdn.jsdelivr.net/gh/renzhezhilu/http-plug/psd/shell.png">
+</p>
+
+# 安全性
+http-plug本意是用来开发时调试使用，避免

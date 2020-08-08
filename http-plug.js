@@ -13,13 +13,15 @@ var os = require('os');
 /******************************************
 配置
 *******************************************/
-//用户自定义端口
-let version = 'v0.2.4'
+// 用户自定义
+let version = 'v0.2.9'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
-let isLog = true // 是否打印访问日志
-let isPkg = false // 当前模式是否pkg打包
+let isLog = false // 是否打印访问日志
+let isPkg = false // 当前模式是否pkg打包,解决pkg打包windows时process.cwd()输出不一致
+
+// 全局变量
 
 // 命令行
 processReturn()
@@ -96,6 +98,7 @@ const splitFileInfo = (url) => {
     let filePath
     //process.execPath 在pkg和本级node输出一致，其他__dirname之类的不行
     let execPath = process.execPath
+    // console.log('execPath-----',execPath);
     switch (isPkg) {
         // pkg 打包时
         case true:
@@ -127,8 +130,6 @@ const splitFileInfo = (url) => {
         ext, //后缀名
         isExist //是否真实存在
     }
-    isLog ? console.log('url信息：', con) : null
-
     return con
 }
 
@@ -268,12 +269,95 @@ const openUrl = function(url, callback) {
     open(url, callback)
 }
 
+// 固定时间最多只执行一次
+let everyTime = {
+    f: function(time = 1000, cd) {
+        if (this.b) {
+            this.b = false
+            setTimeout(() => {
+                cd()
+                this.b = true
+            }, time);
+        }
+    },
+    b: true
+}
+
+let watchDirTime = null //文件夹监听会改变这个时间戳
+// 监听文件夹变化
+const watchDir = function() {
+    let execPath = process.execPath
+    switch (isPkg) {
+        // pkg 打包时
+        case true:
+            execPath = execPath.split(path.sep)
+            execPath.pop()
+            execPath = execPath.join(path.sep)
+            break;
+            // 单文件和npm模块
+        case false:
+            execPath = `${process.cwd()}`
+            break;
+    }
+
+    console.log(execPath);
+    
+
+    fs.watch(execPath, {
+        recursive: true
+    }, (event, filename) => {
+        everyTime.f(600, () => {
+           
+            isLog ?  console.log(`有文件更新：${filename}`) : null
+
+            watchDirTime = new Date().getTime()
+        })
+    })
+}
+
+// 浏览器轮询
+const watchInBrowser = 
+    `
+    <script>
+    // form https://developer.mozilla.org/zh-CN/docs/Web/API/Page_Visibility_API
+    let WATCH_HTTP_PLUG_OBJECT = {
+        fun: function() {
+            this.set = setInterval(() => {
+            fetch('/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu').then(d => d.json())
+                    .then(d => {
+                        if (!d.time) {} else if (d.time && !this.time) {
+                            this.time = d.time
+                        } else if (d.time > this.time) {
+                            console.log('可以刷新了！！！！');
+                            location.reload();
+                            this.time = d.time
+                        }
+                    })
+            }, 1000);
+        },
+        set: null,
+        time: null
+    };
+    WATCH_HTTP_PLUG_OBJECT.fun()
+    document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+        WATCH_HTTP_PLUG_OBJECT.fun()
+        } else {
+            clearInterval(WATCH_HTTP_PLUG_OBJECT.set)
+        }
+
+    });
+        
+    </script>
+    `
+
+
 // 终端命令
 function processReturn() {
     let argv = process.argv
     argv = argv.slice(2)
-    let helpLog = ()=>{
-        return  console.log(
+    let helpLog = () => {
+        return console.log(
             `
 plug                    打开http-plug(默认端口9527)
 plug 8888               使用8888端口打开（失败后则重新随机分配可用端口）
@@ -286,27 +370,25 @@ plug -h | -H            帮助
     }
     if (argv.length === 1) {
         //版本
-        if (['-v', '-V','-version'].includes(argv[0])) {
+        if (['-v', '-V', '-version'].includes(argv[0])) {
             console.log(version);
             process.exit()
-        } 
-        else if (['-l', '-L','-log'].includes(argv[0])) {
+        } else if (['-l', '-L', '-log'].includes(argv[0])) {
             isLog = true
         }
         // 帮助
-        else if (['-h', '-H','-help'].includes(argv[0])) {
+        else if (['-h', '-H', '-help'].includes(argv[0])) {
             helpLog()
             process.exit()
         }
         // 端口
-        else{
+        else {
             port = argv[0]
         }
-    }
-    else if (argv.length === 2) {
+    } else if (argv.length === 2) {
         port = argv[0]
         isLog = true
-    }else if(argv.length>=3){
+    } else if (argv.length >= 3) {
         console.log('命令错误');
         helpLog()
     }
@@ -476,6 +558,8 @@ const listPageHtml = function(title, back, folderPath, content) {
                 ${content}
             </table>
         </div>
+
+        ${watchInBrowser}
     </body>
     </html>
 `
@@ -503,6 +587,9 @@ async function GO() {
 }
 // 启动服务
 function startServer() {
+    // 启动监听
+    watchDir()
+    // 启动http
     let server = new http.Server();
     server.listen(port, host);
     server.on('request', function(req, res) {
@@ -542,7 +629,7 @@ function startServer() {
                         ext = path.parse(thisFile).base
                     }
                 }
-              
+
                 // 链接
                 let thisLink = url + file
                 // 名称
@@ -579,38 +666,35 @@ function startServer() {
                 if (stats.isDirectory()) {
                     let files = fs.readdirSync(thisFile + '/')
                     files = filterFiles(files)
-                    if(files.some(s=>path.parse(s).ext.substr(1)==='html')) thisClassName = 'folder_html'
+                    if (files.some(s => path.parse(s).ext.substr(1) === 'html')) thisClassName = 'folder_html'
                     thisCount = files.length
                     thisSize = '-'
                     thisLink += '/'
                 }
                 let iconSvg = ''
-                if(thisClassName==='folder'){
-                    iconSvg =`
+                if (thisClassName === 'folder') {
+                    iconSvg = `
                     <svg t="1594365202577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21498" width="200" height="200">
                         <path d="M800 512H32V160c0-70.4 57.6-128 128-128h416l224 480z" fill="#5d6f83" p-id="21499"></path>
                         <path d="M896 992H160c-70.4 0-128-57.6-128-128V320c0-70.4 57.6-128 128-128h736c70.4 0 128 57.6 128 128v544c0 70.4-57.6 128-128 128z" fill="#7b899c" p-id="21500"></path>
                     </svg>
                     `
-                }
-                else if(thisClassName==='folder_html'){
-                    iconSvg =`
+                } else if (thisClassName === 'folder_html') {
+                    iconSvg = `
                     <svg t="1594365202577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21498" width="200" height="200">
                         <path d="M800 512H32V160c0-70.4 57.6-128 128-128h416l224 480z" fill="#ffd76d" p-id="21499"></path>
                         <path d="M896 992H160c-70.4 0-128-57.6-128-128V320c0-70.4 57.6-128 128-128h736c70.4 0 128 57.6 128 128v544c0 70.4-57.6 128-128 128z" fill="#eeb92b" p-id="21500"></path>
                     </svg>
                     `
-                }
-                else if(thisClassName==='file'){
-                    iconSvg =`
+                } else if (thisClassName === 'file') {
+                    iconSvg = `
                     <svg t="1594365294707" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24070" width="16" height="16">
                         <path d="M725.333 0H196.267c-84.48 0-153.6 69.12-153.6 153.6v716.8c0 84.48 69.12 153.6 153.6 153.6h631.466c84.48 0 153.6-69.12 153.6-153.6V256l-256-256zM896 870.4c0 37.547-30.72 68.267-68.267 68.267H196.267c-37.547 0-68.267-30.72-68.267-68.267V153.6c0-37.547 30.72-68.267 68.267-68.267h409.6V307.2c0 37.547 30.72 68.267 68.266 68.267H896V870.4zM708.267 290.133c-9.387 0-17.067-7.68-17.067-17.066V85.333l204.8 204.8H708.267z" fill="#5d6f83" p-id="24071"></path>
                         <path d="M588.8 716.8H298.667c-23.894 0-42.667 18.773-42.667 42.667s18.773 42.666 42.667 42.666H588.8c23.893 0 42.667-18.773 42.667-42.666S612.693 716.8 588.8 716.8zM256 571.733c0 23.894 18.773 42.667 42.667 42.667h426.666c23.894 0 42.667-18.773 42.667-42.667s-18.773-42.666-42.667-42.666H298.667c-23.894 0-42.667 18.773-42.667 42.666z" fill="#7b899c" p-id="24072"></path>
                     </svg>
                     `
-                }
-                else if(thisClassName==='file_html'){
-                    iconSvg =`
+                } else if (thisClassName === 'file_html') {
+                    iconSvg = `
                     <svg t="1594365294707" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24070" width="16" height="16">
                         <path d="M725.333 0H196.267c-84.48 0-153.6 69.12-153.6 153.6v716.8c0 84.48 69.12 153.6 153.6 153.6h631.466c84.48 0 153.6-69.12 153.6-153.6V256l-256-256zM896 870.4c0 37.547-30.72 68.267-68.267 68.267H196.267c-37.547 0-68.267-30.72-68.267-68.267V153.6c0-37.547 30.72-68.267 68.267-68.267h409.6V307.2c0 37.547 30.72 68.267 68.266 68.267H896V870.4zM708.267 290.133c-9.387 0-17.067-7.68-17.067-17.066V85.333l204.8 204.8H708.267z" fill="#eeb92b" p-id="24071"></path>
                         <path d="M588.8 716.8H298.667c-23.894 0-42.667 18.773-42.667 42.667s18.773 42.666 42.667 42.666H588.8c23.893 0 42.667-18.773 42.667-42.666S612.693 716.8 588.8 716.8zM256 571.733c0 23.894 18.773 42.667 42.667 42.667h426.666c23.894 0 42.667-18.773 42.667-42.667s-18.773-42.666-42.667-42.666H298.667c-23.894 0-42.667 18.773-42.667 42.666z" fill="#ffd76d" p-id="24072"></path>
@@ -618,7 +702,7 @@ function startServer() {
                     `
                 }
 
-                
+
                 content +=
                     `
                 <tr>
@@ -640,11 +724,20 @@ function startServer() {
             res.end(`
            ${listPageHtml(title, back, folderPath, content)}
         `);
+            isLog ? console.log('url信息：', {url,filePath,base,name,ext,isExist}) : null
+            
         }
         // 文件
         else if (isExist) {
+            // html
+            if (ext === 'html') {
+                let html = fs.readFileSync(filePath, 'utf8')
+                html = html + watchInBrowser
+                res.setHeader('Content-Type', fileTyle()[ext]);
+                res.end(html)
+            }
             // 支持的格式
-            if (fileTyle()[ext]) {
+            else if (fileTyle()[ext]) {
                 res.setHeader('Content-Type', fileTyle()[ext]);
                 fs.createReadStream(filePath).pipe(res);
             }
@@ -653,11 +746,19 @@ function startServer() {
                 res.setHeader('Content-Type', 'text/plain;charset=utf-8');
                 fs.createReadStream(filePath).pipe(res);
             }
+            isLog ? console.log('url信息：', {url,filePath,base,name,ext,isExist}) : null
+        }
+        // 请求整个目录的更新时间戳
+        else if (!isExist && url === '/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu') {
+            res.writeHead(200, 'Content-Type', fileTyle().json);
+            res.end(JSON.stringify({
+                'time': watchDirTime
+            }))
         }
         // 不存在
         else {
             res.writeHead(404, {
-                "Content-Type": "text/html;charset=utf-8"
+                "Content-Type": fileTyle().html
             });
             res.end(`<h1>404 Not Found!</h1>`);
         }

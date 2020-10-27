@@ -126,6 +126,7 @@ node http-plug.js
 软件所在的根目录即为服务器的根目录。
 
 > pkg把整个node都打包了，虽然是用了8.0版本的node，但还是很大😒。
+> 试试用[sciter-js-sdk](https://github.com/c-smile/sciter-js-sdk)打包 -2020-10-27
 
 [下载 windows7/10(21.8 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.9/http-plug-win.exe)
 

@@ -1,6 +1,6 @@
 {
     "name": "http-plug",
-    "version": "0.2.11",
+    "version": "0.2.12",
     "description": "Easy-to-use full platform static server，无依赖的迷你静态服务器，主要做html调试",
     "main": "http-plug.js",
     "config": {

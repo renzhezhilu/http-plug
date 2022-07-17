@@ -14,7 +14,7 @@ var os = require('os');
 配置
 *******************************************/
 // 用户自定义
-let version = 'v0.2.11'
+let version = 'v0.2.12'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
@@ -64,6 +64,7 @@ const fileTyle = function() {
         ttf: "font/ttf",
         woff: "font/woff",
         woff2: "font/woff2",
+        wasm:"application/wasm"
     }
 }
 // 欢迎
@@ -583,7 +584,26 @@ async function GO() {
     }
     openUrl(`http://127.0.0.1:${port}`)
     console.log(`如未自动打开，请访问：http://127.0.0.1:${port}`);
-    console.log(`局域网内可访问：http://${os.networkInterfaces().en0[1].address}:${port}`);
+    console.log(`局域网内可访问：http://${getLocalWlanHost()}:${port}`);
+}
+function getLocalWlanHost(){
+    let host = 'localhost';
+    try {
+        const ifaces = os.networkInterfaces();
+        for (let dev in ifaces) {
+          ifaces[dev].forEach((details, alias) => {
+             // 寻找IPv4协议族，并且地址不是本地地址或者回环地址的地址即可。
+            if (details.family === 'IPv4' && details.address !== '127.0.0.1' && !details.internal) {
+              host = details.address;
+            }
+          });
+        }
+      } catch (e) {
+        // console.log(e);
+        host = 'localhost';
+      }
+    //   console.log(host);
+      return host
 }
 // 启动服务
 function startServer() {

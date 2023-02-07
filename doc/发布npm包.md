@@ -42,7 +42,7 @@ open ~/.npmrc
 #### 发布前临时修改源, 不影响cnpm的使用
 
 ``` 
-npm config set registry http://registry.npmjs.org/
+npm config set registry https://registry.npmjs.org/
 ```
 > 缺点：每次更新都要npm login重新登录
 

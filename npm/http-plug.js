@@ -110,7 +110,7 @@ const splitFileInfo = (url) => {
             break;
             // 单文件和npm模块
         case false:
-            filePath = `${process.cwd()}${url}`
+            filePath = `${process.cwd()}${url.split('?')[0]}`
             break;
     }
 

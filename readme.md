@@ -127,12 +127,12 @@ node http-plug.js
 
 > pkg把整个node都打包了，虽然是用了8.0版本的node，但还是很大😒。
 > 试试用[sciter-js-sdk](https://github.com/c-smile/sciter-js-sdk)打包 -2020-10-27
+<!-- 
+[下载 windows7/10(21.8 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.13/http-plug-win.exe)
 
-[下载 windows7/10(21.8 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.9/http-plug-win.exe)
+[下载 macOS(33.7 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.13/http-plug-macos)
 
-[下载 macOS(33.7 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.9/http-plug-macos)
-
-[下载 linux(32.7 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.9/http-plug-linux))
+[下载 linux(32.7 MB)](https://github.com/renzhezhilu/http-plug/releases/download/0.2.13/http-plug-linux)) -->
 
 <!-- # 文件说明
 ```

@@ -7,14 +7,14 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 const net = require('net')
-var os = require('os');
-
+const os = require('os');
+const cp_command = require('child_process')
 
 /******************************************
 配置
 *******************************************/
 // 用户自定义
-let version = 'v0.2.12'
+let version = 'v0.2.13'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
@@ -225,8 +225,29 @@ const twoTimeInterval = function(beforeTime, afterTime) {
     }
     return out
 }
+///////////////////// 新的openUrlV2
+function openUrlV2(url) {
+    var command;
+    switch (process.platform) {
+        case 'darwin':
+            command = 'open';
+            break;
+        case 'win32':
+            command = 'start';
+            break;
+        case 'linux':
+            command = 'x-www-browser';
+            break;
+        default:
+            throw new Error('Unsupported platform: ' + process.platform);
+    }
+    cp_command.exec(`${command} ${url}`)
+}
+
+
 // 打开链接 
 //form https://github.com/rauschma/openurl
+///////////////////// 在windows下发生中断错误，弃用
 const openUrl = function(url, callback) {
     var spawn = require('child_process').spawn;
     var command;
@@ -582,7 +603,7 @@ async function GO() {
         port = await canUseProt()
         startServer()
     }
-    openUrl(`http://127.0.0.1:${port}`)
+    openUrlV2(`http://127.0.0.1:${port}`)
     console.log(`如未自动打开，请访问：http://127.0.0.1:${port}`);
     console.log(`局域网内可访问：http://${getLocalWlanHost()}:${port}`);
 }

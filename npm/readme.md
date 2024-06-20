@@ -30,6 +30,11 @@
 - [x] 文件改动时html页面会实时刷新
 - [x] 非常迷你, 无依赖, 30KB不到
 - [x] 全局命令, 哪里需要点哪里
+- [x] 默认开启 [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer?retiredLocale=de)
+```
+res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+```
 - [ ] 可设置账户登录
 - [ ] 搜索文件
 

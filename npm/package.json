@@ -1,7 +1,7 @@
 {
     "name": "http-plug",
-    "version": "0.2.15",
-    "description": "Easy-to-use full platform static server，无依赖的迷你静态服务器，主要做html调试",
+    "version": "0.3.1",
+    "description": "Easy-to-use full platform static server，无依赖的迷你静态服务器，主要做html调试,SSE 热更新",
     "main": "http-plug.js",
     "config": {
         "port": "9527"

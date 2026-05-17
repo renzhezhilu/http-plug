@@ -1,5 +1,5 @@
 #!/usr/bin/env node
- // ⬆️ 指定文件由node执行，全局命令用
+// ⬆️ 指定文件由node执行，全局命令用
 /******************************************
 系统模块
 *******************************************/
@@ -14,7 +14,7 @@ const cp_command = require('child_process')
 配置
 *******************************************/
 // 用户自定义
-let version = 'v0.2.13'
+let version = 'v0.3.1'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
@@ -22,12 +22,23 @@ let isLog = false // 是否打印访问日志
 let isPkg = false // 当前模式是否pkg打包,解决pkg打包windows时process.cwd()输出不一致
 
 // 全局变量
+let setHeader = (req, res) => {
+    const headers = {
+        'Access-Control-Allow-Origin': '*', /* @dev First, read about security */
+        'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+        'Access-Control-Max-Age': 2592000, // 30 days
+        /** add other headers as per requirement */
+    };
+
+    res.writeHead(200, headers);
+    res.end('Hello World setHeader');
+}
 
 // 命令行
 processReturn()
 
 //过滤不必要文件
-const filterFiles = function(files) {
+const filterFiles = function (files) {
     let noNeed = [
         '.DS_Store',
         '.git',
@@ -36,17 +47,18 @@ const filterFiles = function(files) {
     return files.filter(f => !noNeed.includes(f))
 }
 //解析文件类型
-const fileTyle = function() {
+const fileTyle = function () {
     return {
         // 文本
-        html: 'text/html;charset=utf-8',
-        htm: 'text/html;charset=utf-8',
-        js: "application/javascript;charset=utf-8",
-        json: "application/json;charset=utf-8",
-        css: "text/css;charset=utf-8",
-        md: "text/markdown;charset=utf-8",
-        txt: "text/plain;charset=utf-8",
-        xml: "text/xml;charset=utf-8",
+        // ;charset=utf-8
+        html: 'text/html',
+        htm: 'text/html',
+        js: "application/javascript",
+        json: "application/json",
+        css: "text/css",
+        md: "text/markdown",
+        txt: "text/plain",
+        xml: "text/xml",
         // 图片
         png: "image/png",
         webp: "image/webp",
@@ -64,11 +76,11 @@ const fileTyle = function() {
         ttf: "font/ttf",
         woff: "font/woff",
         woff2: "font/woff2",
-        wasm:"application/wasm"
+        wasm: "application/wasm"
     }
 }
 // 欢迎
-const welcome = function() {
+const welcome = function () {
     return `
  _______________________________________________
 |           __  __  ______  ______  ______      |
@@ -108,7 +120,7 @@ const splitFileInfo = (url) => {
             execPath = execPath.join(path.sep)
             filePath = `${execPath}${url}`
             break;
-            // 单文件和npm模块
+        // 单文件和npm模块
         case false:
             filePath = `${process.cwd()}${url.split('?')[0]}`
             break;
@@ -136,8 +148,8 @@ const splitFileInfo = (url) => {
 }
 
 // 端口检测
-const canUseProt = function(intPort) {
-    let testProt = net.createServer()
+const canUseProt = function (intPort) {
+    let testProt = net.createServer(setHeader)
     return new Promise((resolve, reject) => {
         // 是否可用
         if (intPort) {
@@ -177,40 +189,40 @@ const canUseProt = function(intPort) {
 
 //两个时间的间隔 
 //form https://github.com/renzhezhilu/Blog/blob/master/javaScript/jsBasic/%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-Object-Date.js
-const twoTimeInterval = function(beforeTime, afterTime) {
+const twoTimeInterval = function (beforeTime, afterTime) {
     let interval = 0
     let unit = [{
-            n: 1000 * 60 * 60 * 24 * 30 * 12 * 100,
-            m: '世纪'
-        },
-        {
-            n: 1000 * 60 * 60 * 24 * 30 * 12,
-            m: '年'
-        },
-        {
-            n: 1000 * 60 * 60 * 24 * 30,
-            m: '月'
-        },
-        {
-            n: 1000 * 60 * 60 * 24,
-            m: '天'
-        },
-        {
-            n: 1000 * 60 * 60,
-            m: '小时'
-        },
-        {
-            n: 1000 * 60,
-            m: '分钟'
-        },
-        {
-            n: 1000 * 1,
-            m: '秒'
-        },
-        {
-            n: 1,
-            m: '毫秒'
-        }
+        n: 1000 * 60 * 60 * 24 * 30 * 12 * 100,
+        m: '世纪'
+    },
+    {
+        n: 1000 * 60 * 60 * 24 * 30 * 12,
+        m: '年'
+    },
+    {
+        n: 1000 * 60 * 60 * 24 * 30,
+        m: '月'
+    },
+    {
+        n: 1000 * 60 * 60 * 24,
+        m: '天'
+    },
+    {
+        n: 1000 * 60 * 60,
+        m: '小时'
+    },
+    {
+        n: 1000 * 60,
+        m: '分钟'
+    },
+    {
+        n: 1000 * 1,
+        m: '秒'
+    },
+    {
+        n: 1,
+        m: '毫秒'
+    }
 
     ]
     let lg = '前'
@@ -249,7 +261,7 @@ function openUrlV2(url) {
 // 打开链接 
 //form https://github.com/rauschma/openurl
 ///////////////////// 在windows下发生中断错误，弃用
-const openUrl = function(url, callback) {
+const openUrl = function (url, callback) {
     var spawn = require('child_process').spawn;
     var command;
     switch (process.platform) {
@@ -270,10 +282,10 @@ const openUrl = function(url, callback) {
         var child = spawn(command, [url]);
         var errorText = "";
         child.stderr.setEncoding('utf8');
-        child.stderr.on('data', function(data) {
+        child.stderr.on('data', function (data) {
             errorText += data;
         });
-        child.stderr.on('end', function() {
+        child.stderr.on('end', function () {
             if (errorText.length > 0) {
                 var error = new Error(errorText);
                 if (callback) {
@@ -294,7 +306,7 @@ const openUrl = function(url, callback) {
 
 // 固定时间最多只执行一次
 let everyTime = {
-    f: function(time = 1000, cd) {
+    f: function (time = 1000, cd) {
         if (this.b) {
             this.b = false
             setTimeout(() => {
@@ -307,8 +319,10 @@ let everyTime = {
 }
 
 let watchDirTime = null //文件夹监听会改变这个时间戳
+let sseClients = []     // 存放所有保持连接的浏览器客户端（SSE）
+
 // 监听文件夹变化
-const watchDir = function() {
+const watchDir = function () {
     let execPath = process.execPath
     switch (isPkg) {
         // pkg 打包时
@@ -317,62 +331,55 @@ const watchDir = function() {
             execPath.pop()
             execPath = execPath.join(path.sep)
             break;
-            // 单文件和npm模块
+        // 单文件和npm模块
         case false:
             execPath = `${process.cwd()}`
             break;
     }
 
     console.log(execPath);
-    
+
 
     fs.watch(execPath, {
         recursive: true
     }, (event, filename) => {
         everyTime.f(600, () => {
-           
-            isLog ?  console.log(`有文件更新：${filename}`) : null
+
+            isLog ? console.log(`有文件更新：${filename}`) : null
 
             watchDirTime = new Date().getTime()
+            
+            // 遍历所有客户端，推送 "reload" 指令
+            sseClients.forEach(client => {
+                client.write(`data: reload\n\n`)
+            })
         })
     })
 }
 
-// 浏览器轮询
-const watchInBrowser = 
-    `
+// 浏览器热更新脚本 (SSE 模式)
+const watchInBrowser = `
     <script>
-    // form https://developer.mozilla.org/zh-CN/docs/Web/API/Page_Visibility_API
-    let WATCH_HTTP_PLUG_OBJECT = {
-        fun: function() {
-            this.set = setInterval(() => {
-            fetch('/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu').then(d => d.json())
-                    .then(d => {
-                        if (!d.time) {} else if (d.time && !this.time) {
-                            this.time = d.time
-                        } else if (d.time > this.time) {
-                            console.log('可以刷新了！！！！');
-                            location.reload();
-                            this.time = d.time
-                        }
-                    })
-            }, 1000);
-        },
-        set: null,
-        time: null
-    };
-    WATCH_HTTP_PLUG_OBJECT.fun()
-    document.addEventListener("visibilitychange", function() {
-        if (!document.hidden) {
-        WATCH_HTTP_PLUG_OBJECT.fun()
-        } else {
-            clearInterval(WATCH_HTTP_PLUG_OBJECT.set)
-        }
-
-    });
+    if ('EventSource' in window) {
+        // 建立到服务器的单向长连接
+        const source = new EventSource('/hot-reload-stream');
         
+        // 监听服务器下发的消息
+        source.onmessage = function(event) {
+            if (event.data === 'reload') {
+                console.log('检测到文件更新，准备刷新页面！');
+                location.reload();
+            }
+        };
+        
+        source.onerror = function() {
+            console.error('热更新服务连接断开，尝试重连...');
+        };
+    } else {
+        console.warn('当前浏览器不支持 Server-Sent Events 热更新');
+    }
     </script>
-    `
+`
 
 
 // 终端命令
@@ -422,7 +429,7 @@ plug -h | -H            帮助
 文件列表html模版
 *******************************************/
 // html模版(title 页面标题,back 返回的链接,path 当前路径,content 列表内容)
-const listPageHtml = function(title, back, folderPath, content) {
+const listPageHtml = function (title, back, folderPath, content) {
     let html = `
     <!DOCTYPE html>
     <html>
@@ -608,24 +615,24 @@ async function GO() {
     console.log(`如未自动打开，请访问：http://127.0.0.1:${port}`);
     console.log(`局域网内可访问：http://${getLocalWlanHost()}:${port}`);
 }
-function getLocalWlanHost(){
+function getLocalWlanHost() {
     let host = 'localhost';
     try {
         const ifaces = os.networkInterfaces();
         for (let dev in ifaces) {
-          ifaces[dev].forEach((details, alias) => {
-             // 寻找IPv4协议族，并且地址不是本地地址或者回环地址的地址即可。
-            if (details.family === 'IPv4' && details.address !== '127.0.0.1' && !details.internal) {
-              host = details.address;
-            }
-          });
+            ifaces[dev].forEach((details, alias) => {
+                // 寻找IPv4协议族，并且地址不是本地地址或者回环地址的地址即可。
+                if (details.family === 'IPv4' && details.address !== '127.0.0.1' && !details.internal) {
+                    host = details.address;
+                }
+            });
         }
-      } catch (e) {
+    } catch (e) {
         // console.log(e);
         host = 'localhost';
-      }
+    }
     //   console.log(host);
-      return host
+    return host
 }
 // 启动服务
 function startServer() {
@@ -634,7 +641,7 @@ function startServer() {
     // 启动http
     let server = new http.Server();
     server.listen(port, host);
-    server.on('request', function(req, res) {
+    server.on('request', function (req, res) {
         // 响应请求
         let {
             url,
@@ -644,6 +651,8 @@ function startServer() {
             ext,
             isExist
         } = splitFileInfo(decodeURI(req.url))
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
         // 目录
         if (url.endsWith('/') && isExist) {
             let files = fs.readdirSync(filePath)
@@ -766,36 +775,65 @@ function startServer() {
             res.end(`
            ${listPageHtml(title, back, folderPath, content)}
         `);
-            isLog ? console.log('url信息：', {url,filePath,base,name,ext,isExist}) : null
-            
+            isLog ? console.log('url信息：', { url, filePath, base, name, ext, isExist }) : null
+
         }
         // 文件
         else if (isExist) {
+            // 新增读取文件夹下默认index.html 适用于 /about 实际访问 /about/index.html 2024-06-20
+            // 返回 Content-Length  2024-06-20
+            // https://nodejs.org/api/http.html#requestgetheadername
+            if (ext === '') {
+                let html = fs.readFileSync(`${filePath}/index.html`, 'utf8')
+                html = html + watchInBrowser
+                res.setHeader('Content-Type', fileTyle()['html']);
+                res.setHeader('Content-Length', Buffer.byteLength(html));
+                res.end(html)
+            }
             // html
-            if (ext === 'html') {
+            else if (ext === 'html') {
                 let html = fs.readFileSync(filePath, 'utf8')
                 html = html + watchInBrowser
                 res.setHeader('Content-Type', fileTyle()[ext]);
+                res.setHeader('Content-Length', Buffer.byteLength(html));
+
                 res.end(html)
             }
             // 支持的格式
             else if (fileTyle()[ext]) {
                 res.setHeader('Content-Type', fileTyle()[ext]);
+                res.setHeader('Content-Length', Buffer.byteLength(fs.readFileSync(filePath)));
                 fs.createReadStream(filePath).pipe(res);
             }
-            // 不支持的格式都当文本处理 
+            // 不支持的格式都当流处理 
             else {
-                res.setHeader('Content-Type', 'text/plain;charset=utf-8');
+                res.setHeader('Content-Type', 'application/octet-stream');
+                res.setHeader('Content-Length', Buffer.byteLength(fs.readFileSync(filePath)));
+
+                // res.setHeader('Content-Type', 'application/javascript');
                 fs.createReadStream(filePath).pipe(res);
             }
-            isLog ? console.log('url信息：', {url,filePath,base,name,ext,isExist}) : null
+            isLog ? console.log('url信息：', { url, filePath, base, name, ext, isExist }) : null
         }
-        // 请求整个目录的更新时间戳
-        else if (!isExist && url === '/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu') {
-            res.writeHead(200, 'Content-Type', fileTyle().json);
-            res.end(JSON.stringify({
-                'time': watchDirTime
-            }))
+        // SSE 热更新流通道
+        else if (!isExist && url === '/hot-reload-stream') {
+            // 设置 SSE 必需的响应头
+            res.writeHead(200, {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive'
+            });
+            
+            // 发送一条注释数据，防止某些浏览器在没有任何数据时挂起连接
+            res.write(': connected\n\n');
+            
+            // 将当前连接加入到客户端池中
+            sseClients.push(res);
+            
+            // 当浏览器关闭页面或断开连接时，将其从池中移除，避免内存泄漏
+            req.on('close', () => {
+                sseClients = sseClients.filter(client => client !== res);
+            });
         }
         // 不存在
         else {

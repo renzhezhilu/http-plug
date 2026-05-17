@@ -14,7 +14,7 @@ const cp_command = require('child_process')
 配置
 *******************************************/
 // 用户自定义
-let version = 'v0.2.15'
+let version = 'v0.3.1'
 let host = '0.0.0.0' //localhost
 let port = 9527 // 端口
 let updateShowType = true // 更新时间是否显示‘前’
@@ -319,6 +319,8 @@ let everyTime = {
 }
 
 let watchDirTime = null //文件夹监听会改变这个时间戳
+let sseClients = []     // 存放所有保持连接的浏览器客户端（SSE）
+
 // 监听文件夹变化
 const watchDir = function () {
     let execPath = process.execPath
@@ -346,45 +348,38 @@ const watchDir = function () {
             isLog ? console.log(`有文件更新：${filename}`) : null
 
             watchDirTime = new Date().getTime()
+            
+            // 遍历所有客户端，推送 "reload" 指令
+            sseClients.forEach(client => {
+                client.write(`data: reload\n\n`)
+            })
         })
     })
 }
 
-// 浏览器轮询
-const watchInBrowser =
-    `
+// 浏览器热更新脚本 (SSE 模式)
+const watchInBrowser = `
     <script>
-    // form https://developer.mozilla.org/zh-CN/docs/Web/API/Page_Visibility_API
-    let WATCH_HTTP_PLUG_OBJECT = {
-        fun: function() {
-            this.set = setInterval(() => {
-            fetch('/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu').then(d => d.json())
-                    .then(d => {
-                        if (!d.time) {} else if (d.time && !this.time) {
-                            this.time = d.time
-                        } else if (d.time > this.time) {
-                            console.log('可以刷新了！！！！');
-                            location.reload();
-                            this.time = d.time
-                        }
-                    })
-            }, 1000);
-        },
-        set: null,
-        time: null
-    };
-    WATCH_HTTP_PLUG_OBJECT.fun()
-    document.addEventListener("visibilitychange", function() {
-        if (!document.hidden) {
-        WATCH_HTTP_PLUG_OBJECT.fun()
-        } else {
-            clearInterval(WATCH_HTTP_PLUG_OBJECT.set)
-        }
-
-    });
+    if ('EventSource' in window) {
+        // 建立到服务器的单向长连接
+        const source = new EventSource('/hot-reload-stream');
         
+        // 监听服务器下发的消息
+        source.onmessage = function(event) {
+            if (event.data === 'reload') {
+                console.log('检测到文件更新，准备刷新页面！');
+                location.reload();
+            }
+        };
+        
+        source.onerror = function() {
+            console.error('热更新服务连接断开，尝试重连...');
+        };
+    } else {
+        console.warn('当前浏览器不支持 Server-Sent Events 热更新');
+    }
     </script>
-    `
+`
 
 
 // 终端命令
@@ -820,12 +815,25 @@ function startServer() {
             }
             isLog ? console.log('url信息：', { url, filePath, base, name, ext, isExist }) : null
         }
-        // 请求整个目录的更新时间戳
-        else if (!isExist && url === '/Hereistheheadquartersyoucancheckforfileupdatesrenzhehilu') {
-            res.writeHead(200, 'Content-Type', fileTyle().json);
-            res.end(JSON.stringify({
-                'time': watchDirTime
-            }))
+        // SSE 热更新流通道
+        else if (!isExist && url === '/hot-reload-stream') {
+            // 设置 SSE 必需的响应头
+            res.writeHead(200, {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive'
+            });
+            
+            // 发送一条注释数据，防止某些浏览器在没有任何数据时挂起连接
+            res.write(': connected\n\n');
+            
+            // 将当前连接加入到客户端池中
+            sseClients.push(res);
+            
+            // 当浏览器关闭页面或断开连接时，将其从池中移除，避免内存泄漏
+            req.on('close', () => {
+                sseClients = sseClients.filter(client => client !== res);
+            });
         }
         // 不存在
         else {
